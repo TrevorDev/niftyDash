@@ -1,0 +1,57 @@
+doctype html
+html
+  head
+    title Website
+    script(src='/bower_components/webcomponentsjs/webcomponents-lite.min.js')
+
+    link(rel="import" href="/bower_components/paper-styles/demo-pages.html")
+    link(rel="import" href="/bower_components/paper-drawer-panel/paper-drawer-panel.html")
+    link(rel="import" href="/bower_components/paper-button/paper-button.html")
+    link(rel="import" href="/bower_components/paper-menu/paper-menu.html")
+    link(rel="import" href="/bower_components/paper-item/paper-item.html")
+    link(rel="import" href="/bower_components/neon-animation/neon-animated-pages.html")
+    link(rel="import" href="/bower_components/neon-animation/neon-animations.html")
+
+    link(rel="import" href="/views/protoElement")
+    link(rel="import" href="/views/components/widget-menu")
+    style.
+      body {
+        overflow: hidden;
+      }
+      neon-animated-pages {
+        height: 100%;
+      }
+      paper-button {
+        color: white;
+        margin: 10px;
+        background-color: #3367d6;
+        white-space: nowrap;
+      }
+      paper-item {
+        cursor: pointer;
+      }
+  body(class="fullbleed")
+    paper-drawer-panel(id="paperDrawerPanel")
+      div(drawer)
+        widget-menu(id="tester")
+      div(main)
+        p test site
+        proto-element(id="hello")
+        paper-button(id="test") hello
+        template(is="dom-bind" id="bi")
+          neon-animated-pages(id="pages" selected="1")
+            p owner
+            p two
+    script.
+      
+      var t = document.querySelector('#hello');
+      var tr = document.querySelector('#tester');
+      t.owner = "sam"
+      
+      setTimeout(function(){
+        t.employees = [{first: "yes"}, {first: "yesss"}]
+        //tr.notifyPath('widgets.0.name', "oneasdasdas");
+        var scope = document.querySelector('#bi');
+        console.log(scope.$.pages.selected = 0)
+        //scope.$.pages.selected = 0;
+      }, 0)

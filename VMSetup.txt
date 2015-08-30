@@ -1,0 +1,29 @@
+#DOCUMENTED AT https://docs.docker.com/examples/postgresql_service/
+# runs on port 5432
+# Set the default command to run when starting the container
+#CMD ["/usr/lib/postgresql/9.3/bin/postgres", "-D", "/var/lib/postgresql/9.3/main", "-c", "config_file=/etc/postgresql/9.3/main/postgresql.conf"]
+#MAKE SURE TO CHANGE PASSWORD WHEN USING IN PRODUCTION
+
+#POSTGRES
+sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8
+sudo echo "deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main" > /etc/apt/sources.list.d/pgdg.list
+sudo apt-get update
+sudo apt-get install -y python-software-properties software-properties-common postgresql-9.3 postgresql-client-9.3 postgresql-contrib-9.3
+sudo -i -u postgres
+/etc/init.d/postgresql start &&\
+psql --command "CREATE USER docker WITH SUPERUSER PASSWORD 'docker';" &&\
+createdb -O docker docker
+echo "host all  all    0.0.0.0/0  md5" >> /etc/postgresql/9.3/main/pg_hba.conf
+echo "listen_addresses='*'" >> /etc/postgresql/9.3/main/postgresql.conf
+/etc/init.d/postgresql restart
+
+#NODEJS
+sudo apt-get -y install build-essential libssl-dev
+curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.26.1/install.sh | bash
+source ~/.profile
+nvm install 0.12.7
+nvm alias default 0.12.7
+nvm use 0.12.7
+npm install pm2 -g
+npm install tsd -g
+npm install bower -g

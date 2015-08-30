@@ -1,0 +1,26 @@
+{
+  "name": "niftyDash",
+  "version": "0.0.0",
+  "authors": [
+    "Trevor Baron <trevorjbaron@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "neon-animation": "PolymerElements/neon-animation#~1.0.6",
+    "paper-badge": "PolymerElements/paper-badge#~1.0.3",
+    "paper-button": "PolymerElements/paper-button#~1.0.3",
+    "paper-card": "PolymerElements/paper-card#~1.0.3",
+    "paper-drawer-panel": "PolymerElements/paper-drawer-panel#~1.0.3",
+    "paper-item": "PolymerElements/paper-item#~1.0.2",
+    "paper-menu": "PolymerElements/paper-menu#~1.1.0",
+    "paper-styles": "PolymerElements/paper-styles#~1.0.11",
+    "polymer": "Polymer/polymer#~1.1.2"
+  }
+}

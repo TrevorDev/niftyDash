@@ -1,0 +1,35 @@
+link(rel='import' href="/bower_components/polymer/polymer.html")
+
+link(rel="import" href="/bower_components/paper-menu/paper-menu.html")
+link(rel="import" href="/bower_components/paper-item/paper-item.html")
+link(rel="import" href="/bower_components/paper-badge/paper-badge.html")
+
+style.
+  .with-badge {
+    
+  }
+
+dom-module(id="widget-menu")
+  template
+    paper-menu(selected="0")
+      template(is="dom-repeat" items="{{widgets}}")
+          paper-item 
+            span {{item.name}}
+              paper-badge(label="7" style="position:fixed;display:inline")
+              
+  script.
+    Polymer({
+      is: "widget-menu",
+      properties: {
+        owner: {
+          type: Object
+        },
+        widgets: {
+          type: Array
+        }
+      },
+      ready: function() {
+        this.widgets = [{name: "one"}, {name: "two"}]
+        this.owner = {name: "trevor"}
+      }
+    });

@@ -1,0 +1,18 @@
+{
+  "name": "niftydash",
+  "version": "0.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Trevor Baron",
+  "license": "",
+  "dependencies": {
+    "babel": "^5.8.23",
+    "body-parser": "^1.13.3",
+    "browserify": "^11.0.1",
+    "express": "^4.13.3",
+    "jade": "^1.11.0"
+  }
+}

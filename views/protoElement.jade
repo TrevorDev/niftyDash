@@ -1,0 +1,24 @@
+link(rel='import' href="/bower_components/polymer/polymer.html")
+
+dom-module(id="proto-element")
+  template
+    p i am here
+      span
+        a(href="[[owner]]") [[owner]]
+        template(is="dom-repeat" items="{{employees}}")
+          div
+            span {{index}}
+            div {{item.first}}
+  script.
+    Polymer({
+      is: "proto-element",
+      properties: {
+        owner: {
+          type: String,
+          value: "Daniel"
+        }
+      },
+      ready: function() {
+        //this.owner = "plz"
+      }
+    });
