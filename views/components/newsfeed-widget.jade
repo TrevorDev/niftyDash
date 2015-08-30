@@ -3,25 +3,40 @@ link(rel='import' href="/bower_components/polymer/polymer.html")
 link(rel="import" href="/bower_components/paper-menu/paper-menu.html")
 link(rel="import" href="/bower_components/paper-item/paper-item.html")
 link(rel="import" href="/bower_components/paper-badge/paper-badge.html")
+link(rel="import" href="/bower_components/paper-card/paper-card.html")
+link(rel="import" href="/bower_components/paper-button/paper-button.html")
 
 style.
-  .with-badge {
-    
+  .cards {
+    @apply(--layout-vertical);
+    @apply(--center-justified);
+    margin-left: 20px;
+    margin-right: 20px;
   }
+  
+  .card {
+    width: 100%;
+    margin-top: 10px;
+  }
+  
+  
 
-dom-module(id="widget-menu")
+dom-module(id="newsfeed-widget")
   template
-    paper-menu(selected="0")
-      template(is="dom-repeat" items="{{_toArray(widgets)}}")
-        paper-item(on-click="onClick")
-          span {{item.name}}
-            template(is="dom-if" if="{{item.notification}}")
-              paper-badge(label="{{item.notification}}" style="position:fixed;display:inline")
-      paper-item(on-click="onClick")
-        span Add Widgets/Settings
+    div(class="cards")
+      paper-card(class="card")
+        div(class="card-content") 
+          span
+            paper-button Delete
+          span
+            paper-button Open
+          span hello worlds
+      paper-card(class="card")
+        div(class="card-content") hello worlds
+        
   script.
     Polymer({
-      is: "widget-menu",
+      is: "newsfeed-widget",
       properties: {
         owner: {
           type: Object

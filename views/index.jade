@@ -12,8 +12,8 @@ html
     link(rel="import" href="/bower_components/neon-animation/neon-animated-pages.html")
     link(rel="import" href="/bower_components/neon-animation/neon-animations.html")
 
-    link(rel="import" href="/views/protoElement")
     link(rel="import" href="/views/components/widget-menu")
+    link(rel="import" href="/views/components/newsfeed-widget")
     style.
       body {
         overflow: hidden;
@@ -35,23 +35,19 @@ html
       div(drawer)
         widget-menu(id="tester")
       div(main)
+        newsfeed-widget(id="newsfeed")
         p test site
-        proto-element(id="hello")
         paper-button(id="test") hello
         template(is="dom-bind" id="bi")
           neon-animated-pages(id="pages" selected="1")
             p owner
             p two
     script.
-      
-      var t = document.querySelector('#hello');
       var tr = document.querySelector('#tester');
-      t.owner = "sam"
-      
-      setTimeout(function(){
-        t.employees = [{first: "yes"}, {first: "yesss"}]
-        //tr.notifyPath('widgets.0.name', "oneasdasdas");
-        var scope = document.querySelector('#bi');
-        console.log(scope.$.pages.selected = 0)
-        //scope.$.pages.selected = 0;
-      }, 0)
+      tr.clickedEvent = function(id){
+        alert(id)
+      }
+      tr.widgets = {
+        reddit: {id:"reddit", name: "Reddit", notification: "3", type: "newsfeed"},
+        hn: {id:"hn", name: "Hacker News", notification: null, type: "newsfeed"}
+      }
