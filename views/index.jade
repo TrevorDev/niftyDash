@@ -33,21 +33,15 @@ html
   body(class="fullbleed")
     paper-drawer-panel(id="paperDrawerPanel")
       div(drawer)
-        widget-menu(id="tester")
+        widget-menu(id="widgetMenu")
       div(main)
         newsfeed-widget(id="newsfeed")
-        p test site
-        paper-button(id="test") hello
-        template(is="dom-bind" id="bi")
-          neon-animated-pages(id="pages" selected="1")
-            p owner
-            p two
     script.
-      var tr = document.querySelector('#tester');
-      tr.clickedEvent = function(id){
+      var widgetMenu = document.querySelector('#widgetMenu');
+      widgetMenu.clickedEvent = function(id){
         alert(id)
       }
-      tr.widgets = {
+      widgetMenu.widgets = {
         reddit: {id:"reddit", name: "Reddit", notification: "3", type: "newsfeed"},
         hn: {id:"hn", name: "Hacker News", notification: null, type: "newsfeed"}
       }

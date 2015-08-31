@@ -4,3 +4,7 @@
 /// <reference path="serve-static/serve-static.d.ts" />
 /// <reference path="body-parser/body-parser.d.ts" />
 /// <reference path="browserify/browserify.d.ts" />
+/// <reference path="bluebird/bluebird.d.ts" />
+/// <reference path="lodash/lodash.d.ts" />
+/// <reference path="sequelize/sequelize.d.ts" />
+/// <reference path="validator/validator.d.ts" />

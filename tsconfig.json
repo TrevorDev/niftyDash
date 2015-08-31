@@ -6,6 +6,7 @@
         "module": "commonjs",
         "isolatedModules": false,
         "jsx": "react",
+        "experimentalAsyncFunctions": true,
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
         "declaration": false,
@@ -22,12 +23,24 @@
     ],
     "files": [
         "./app.ts",
+        "./controllers/user.ts",
         "./libs/appFactory.ts",
+        "./libs/config.ts",
+        "./libs/database.ts",
+        "./models/models.ts",
+        "./models/user.ts",
+        "./models/viewedItem.ts",
+        "./models/widget.ts",
+        "./models/widgetSettings.ts",
         "./typings/body-parser/body-parser.d.ts",
+        "./typings/browserify/browserify.d.ts",
         "./typings/express/express.d.ts",
+        "./typings/lodash/lodash.d.ts",
         "./typings/mime/mime.d.ts",
         "./typings/node/node.d.ts",
+        "./typings/sequelize/sequelize.d.ts",
         "./typings/serve-static/serve-static.d.ts",
-        "./typings/tsd.d.ts"
+        "./typings/tsd.d.ts",
+        "./typings/validator/validator.d.ts"
     ]
 }
