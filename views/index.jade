@@ -31,17 +31,19 @@ html
         cursor: pointer;
       }
   body(class="fullbleed")
+    div(id="test")
     paper-drawer-panel(id="paperDrawerPanel")
       div(drawer)
         widget-menu(id="widgetMenu")
       div(main)
         newsfeed-widget(id="newsfeed")
+    script(src="/browserify/index/logic.js")
     script.
-      var widgetMenu = document.querySelector('#widgetMenu');
-      widgetMenu.clickedEvent = function(id){
-        alert(id)
-      }
-      widgetMenu.widgets = {
-        reddit: {id:"reddit", name: "Reddit", notification: "3", type: "newsfeed"},
-        hn: {id:"hn", name: "Hacker News", notification: null, type: "newsfeed"}
-      }
+      //- var widgetMenu = document.querySelector('#widgetMenu');
+      //- widgetMenu.clickedEvent = function(id){
+      //-   alert(id)
+      //- }
+      //- widgetMenu.widgets = {
+      //-   reddit: {id:"reddit", name: "Reddit", notification: "3", type: "newsfeed"},
+      //-   hn: {id:"hn", name: "Hacker News", notification: null, type: "newsfeed"}
+      //- }

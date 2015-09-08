@@ -37,5 +37,5 @@ interface Browserify {
 
 declare module "browserify" {
   var browserify: Browserify;
-  export = browserify;
+  export default browserify;
 }

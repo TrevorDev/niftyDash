@@ -40,6 +40,10 @@ dom-module(id="widget-menu")
           type: Function
         }
       },
+      widgetsChanged: function(c){
+        console.log(c)
+        //this.notifyPath("widgets", c)
+      },
       onClick: function(event) {
         this.clickedEvent(event.model ? event.model.item.id : "config")
       },
