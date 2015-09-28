@@ -8,7 +8,7 @@ html
     style.
       
   body
-    div.container-fluid(style="padding-right:0px;padding-left:0px;")
+    div.container-fluid(style="padding-right:0px;padding-left:0px;overflow:hidden")
       div.row
         #sideMenu.col-xl-2
           ul.list-group
@@ -19,17 +19,17 @@ html
             li.btn.list-group-item(rv-each-widget="widgets" rv-on-click="widgetMenuClicked" style="text-align: inherit;")
               span [[widget.name]]
               span(class="label label-default label-pill pull-right") [[widget.notification]]
-        #widgetContent.col-xl-10
           div
             span
               a(rv-href="accountUrl")  Link
             span  to your account for other browsers
-          div.card(rv-each-story="selectedWidget.stories")
+        #widgetContent.col-xl-10
+          div.card(rv-each-story="stories")
             div.card-block
-              button.btn.btn-secondary(style="margin-right:3px;" rv-on-click="selectedWidget.storyClicked")
+              button.btn.btn-secondary(style="margin-right:3px;" rv-on-click="storyClicked")
                 i.fa.fa-close
               a(target="_blank" rv-href="story.commentsUrl")
-                button.btn.btn-secondary( rv-on-click="selectedWidget.storyClicked" style="margin-right:3px;")
+                button.btn.btn-secondary( rv-on-click="storyClicked" style="margin-right:3px;")
                   i.fa.fa-comments
               span.card-text [[story.title]]
         

@@ -20,17 +20,23 @@ async function main(){
   var viewedItems = (await $.get("/api/user/getViewedItems")).reduce((prev, cur)=>{prev[cur]=true;return prev},{})
 
   //setup templates
+  var contentview
+  var oldH = $('#widgetContent').html()
   var template = {
     widgets: [],
     selectedWidget: null,
     accountUrl: "/?account="+params.account,
     widgetMenuClicked: (event, binding)=>{
-      //todo use id instead of name
       template.selectedWidget = binding.widget
+      if(contentview){
+        contentview.unbind()
+      }
+      $('#widgetContent').html(oldH)
+      //TODO figure out if it is a bug with rivets that this leaks memory???
+      contentview = r.bind($('#widgetContent'), template.selectedWidget)
     }
   }
-  r.bind($('#sideMenu'), template)
-  r.bind($('#widgetContent'), template)
+  var menuView = r.bind($('#sideMenu'), template)
 
   //create widgets from users widgets
   template.widgets = (await $.get("/api/user/getWidgets"))
