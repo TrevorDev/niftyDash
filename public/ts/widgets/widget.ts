@@ -1,18 +1,38 @@
 import $ from "jquery"
 
-class newsfeedWidget {
-  stories = []
+class Widget {
   name = "Widget"
   notification = "..."
   settings = null
-  constructor(widget){
+  constructor(widget, public viewedItems){
     this.settings = JSON.parse(widget.settings)
     //console.log(this.settings)
+  }
+  init = async function(){
+
+  }
+  updateNotification = async function(){
+
+  }
+}
+
+class newsfeedWidget extends Widget {
+  stories = []
+  init = async function(){
+    await this.getStories()
   }
   getStories = async function(){
 
   }
-  init = async function(widget){
+  updateNotification = async function(){
+    this.notification = this.stories.length+""
+  }
+  storyClicked = async (event, binding)=>{
+    setTimeout(async ()=>{
+      this.stories = this.stories.filter((s)=>s.id != binding.story.id)
+      $.post("/api/viewedItem/add", {item: binding.story.id})
+      await this.updateNotification()
+    },0)
   }
 }
 
@@ -29,7 +49,8 @@ class redditWidget extends newsfeedWidget {
     var widget = this;
     this.stories = res.data.children
       .map((i)=>new Story(widget.name+i.data.id, i.data.title, i.data.url, "https://www.reddit.com"+i.data.permalink))
-      console.log("here")
+      .filter((i)=> !this.viewedItems[i.id])
+    await this.updateNotification()
   }
 }
 
@@ -37,6 +58,7 @@ class hackerNewsWidget extends newsfeedWidget {
   name = "Hacker News"
   getStories = async function(){
     await $.get("http://www.reddit.com/r/science/top.json")
+    await this.updateNotification()
   }
 }
 

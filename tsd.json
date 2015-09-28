@@ -37,6 +37,12 @@
     },
     "jquery/jquery.d.ts": {
       "commit": "bb051830df88f5a55dcf06b7fe85bf6b62cc97f2"
+    },
+    "rivets/rivets.d.ts": {
+      "commit": "54f064352a3615443f7bff4198078db15e28247b"
+    },
+    "express-session/express-session.d.ts": {
+      "commit": "b937e64fc9245d299fa4ba26c6eddbeaed42a920"
     }
   }
 }

@@ -8,15 +8,25 @@
   },
   "author": "Trevor Baron",
   "license": "",
+  "browser": {
+    "rivets": "./bower_components/rivets/dist/rivets.min.js"
+  },
+  "browserify-shim": {
+    "rivets": {
+      "exports": "rivets"
+    }
+  },
   "dependencies": {
     "babel": "^5.8.23",
     "body-parser": "^1.13.3",
     "browserify": "^11.0.1",
     "express": "^4.13.3",
+    "express-session": "^1.11.3",
     "jade": "^1.11.0",
     "jquery": "^2.1.4",
     "pg": "^4.4.1",
     "pg-hstore": "^2.3.2",
-    "sequelize": "^3.6.0"
+    "sequelize": "^3.6.0",
+    "sightglass": "^0.2.4"
   }
 }

@@ -10,6 +10,7 @@ import "./libs/database";
 import "./models/models";
 
 import user from "./controllers/user";
+import viewedItem from "./controllers/viewedItem";
 
 
 async function main(){
@@ -22,6 +23,10 @@ async function main(){
 	});
 
 	app.get("/api/user/getWidgets", user.getWidgets)
+	app.post("/api/user/create", user.create)
+	app.post("/api/user/login", user.login)
+	app.post("/api/viewedItem/add", viewedItem.add)
+	app.get("/api/user/getViewedItems", user.getViewedItems)
 
 	app.get('/browserify/*', function(req, res) {
 		//TODO: cache this in production or generate all files beforehand

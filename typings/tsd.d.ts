@@ -9,3 +9,5 @@
 /// <reference path="sequelize/sequelize.d.ts" />
 /// <reference path="validator/validator.d.ts" />
 /// <reference path="jquery/jquery.d.ts" />
+/// <reference path="rivets/rivets.d.ts" />
+/// <reference path="express-session/express-session.d.ts" />

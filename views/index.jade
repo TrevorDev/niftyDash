@@ -2,41 +2,34 @@ doctype html
 html
   head
     title Website
-    script(src='/bower_components/webcomponentsjs/webcomponents-lite.min.js')
-
-    link(rel="import" href="/bower_components/paper-styles/demo-pages.html")
-    link(rel="import" href="/bower_components/paper-drawer-panel/paper-drawer-panel.html")
-    link(rel="import" href="/bower_components/paper-button/paper-button.html")
-    link(rel="import" href="/bower_components/paper-menu/paper-menu.html")
-    link(rel="import" href="/bower_components/paper-item/paper-item.html")
-    link(rel="import" href="/bower_components/neon-animation/neon-animated-pages.html")
-    link(rel="import" href="/bower_components/neon-animation/neon-animations.html")
-
-    link(rel="import" href="/views/components/widget-menu")
-    link(rel="import" href="/views/components/newsfeed-widget")
+    link(rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css")
+    link(rel="stylesheet" href="/bower_components/font-awesome/css/font-awesome.min.css")
+    //- script(src='/bower_components/bootstrap/dist/js/bootstrap.min.js')
     style.
-      body {
-        overflow: hidden;
-      }
-      neon-animated-pages {
-        height: 100%;
-      }
-      paper-button {
-        color: white;
-        margin: 10px;
-        background-color: #3367d6;
-        white-space: nowrap;
-      }
-      paper-item {
-        cursor: pointer;
-      }
-  body(class="fullbleed")
-    div(id="test")
-    paper-drawer-panel(id="paperDrawerPanel")
-      div(drawer)
-        widget-menu(id="widgetMenu")
-      div(main)
-        newsfeed-widget(id="newsfeed")
+      
+  body
+    div.container-fluid(style="padding-right:0px;padding-left:0px;")
+      div.row
+        #sideMenu.col-md-2
+          ul.list-group
+            li.list-group-item.active
+              span
+                i.fa.fa-diamond
+              span  Widgets
+            li.btn.list-group-item(rv-each-widget="widgets" rv-on-click="widgetMenuClicked" style="text-align: inherit;")
+              span [[widget.name]]
+              span(class="label label-default label-pill pull-right") [[widget.notification]]
+        #widgetContent(class="col-md-10")
+          div [[accountUrl]]
+          div.card(rv-each-story="selectedWidget.stories")
+            div.card-block
+              button.btn.btn-secondary(style="margin-right:3px;" rv-on-click="selectedWidget.storyClicked")
+                i.fa.fa-close
+              a(target="_blank" rv-href="story.commentsUrl")
+                button.btn.btn-secondary( rv-on-click="selectedWidget.storyClicked" style="margin-right:3px;")
+                  i.fa.fa-comments
+              span.card-text [[story.title]]
+        
     script(src="/browserify/index/logic.js")
     script.
       //- var widgetMenu = document.querySelector('#widgetMenu');

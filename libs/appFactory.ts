@@ -1,6 +1,6 @@
 import express from "express"
 import bodyParser from "body-parser";
-
+import session from "express-session"
 export default {
 	createApp: function(){
 		var app = express();
@@ -8,6 +8,12 @@ export default {
 		app.set('view engine', 'jade');
 		app.set('view options', { layout: false });
 
+		//TODO make this secret and move to config.ts
+		app.use(session({
+		  secret: 'super secret',
+		  resave: false,
+		  saveUninitialized: true
+		}))
 		app.use(bodyParser.urlencoded({ extended: true }));
 		app.use(bodyParser.json());
 
