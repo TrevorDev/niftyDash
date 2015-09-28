@@ -10,17 +10,20 @@ html
   body
     div.container-fluid(style="padding-right:0px;padding-left:0px;")
       div.row
-        #sideMenu.col-md-2
+        #sideMenu.col-xl-2
           ul.list-group
             li.list-group-item.active
               span
                 i.fa.fa-diamond
-              span  Widgets
+              span  NiftyKick
             li.btn.list-group-item(rv-each-widget="widgets" rv-on-click="widgetMenuClicked" style="text-align: inherit;")
               span [[widget.name]]
               span(class="label label-default label-pill pull-right") [[widget.notification]]
-        #widgetContent(class="col-md-10")
-          div [[accountUrl]]
+        #widgetContent.col-xl-10
+          div
+            span
+              a(rv-href="accountUrl")  Link
+            span  to your account for other browsers
           div.card(rv-each-story="selectedWidget.stories")
             div.card-block
               button.btn.btn-secondary(style="margin-right:3px;" rv-on-click="selectedWidget.storyClicked")

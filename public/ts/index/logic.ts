@@ -11,6 +11,7 @@ async function main(){
   var params:any = ar.reduce((prev, cur)=>{prev[cur.split("=")[0].slice(1)]=cur.split("=")[1];return prev},{})
 
   //auth
+  //TODO store account in localstorage
   if(!params.account){
     var data = await $.post("/api/user/create")
     params.account = data.account

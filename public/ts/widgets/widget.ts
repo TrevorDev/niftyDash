@@ -1,5 +1,5 @@
 import $ from "jquery"
-
+import hn from "../../../libs/hn";
 class Widget {
   name = "Widget"
   notification = "..."
@@ -57,7 +57,10 @@ class redditWidget extends newsfeedWidget {
 class hackerNewsWidget extends newsfeedWidget {
   name = "Hacker News"
   getStories = async function(){
-    await $.get("http://www.reddit.com/r/science/top.json")
+    var widget = this;
+    this.stories = (await hn.getTopStories(100))
+      .map((i)=>new Story(widget.name+i.id,i.title, i.url, "https://news.ycombinator.com/item?id="+i.id))
+      .filter((i)=> !this.viewedItems[i.id])
     await this.updateNotification()
   }
 }
