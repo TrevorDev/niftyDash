@@ -30,10 +30,11 @@ class newsfeedWidget extends Widget {
   storyClicked = async (event, binding)=>{
     setTimeout(async ()=>{
       console.log(this.name)
-      console.log(binding)
-      console.log(this.stories[0].title)
-      this.stories = this.stories.filter((s)=>s.id != binding.story.id)
+      console.log(binding.story.title)
+      console.log(binding.story.id)
       $.post("/api/viewedItem/add", {item: binding.story.id})
+      this.stories = this.stories.filter((s)=>s.id != binding.story.id)
+
       await this.updateNotification()
     },0)
   }
