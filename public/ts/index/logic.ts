@@ -44,6 +44,10 @@ async function main(){
     .filter((w) => w.class!=null)
     .map((w) => new w.class(w.widget, viewedItems))
 
+  //TODO clean this up
+  template.selectedWidget = template.widgets[0]
+  contentview = r.bind($('#widgetContent'), template.selectedWidget)
+
   //init all widgets
   await objectPromise(template.widgets.map((w)=>w.init()))
   if(template.widgets.length > 0 && template.selectedWidget == null){
