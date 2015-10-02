@@ -34,6 +34,8 @@ async function main(){
       $('#widgetContent').html(oldH)
       //TODO figure out if it is a bug with rivets that this leaks memory???
       contentview = r.bind($('#widgetContent'), template.selectedWidget)
+      $(".rvHide").css("display", "inherit")
+      $("#loadingPage").css("display", "none");
     }
   }
   var menuView = r.bind($('#sideMenu'), template)
