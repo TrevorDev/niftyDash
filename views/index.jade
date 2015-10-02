@@ -4,6 +4,7 @@ html
     title Website
     link(rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css")
     link(rel="stylesheet" href="/bower_components/font-awesome/css/font-awesome.min.css")
+    link(rel="stylesheet" href="/public/css/main.css")
     //- script(src='/bower_components/bootstrap/dist/js/bootstrap.min.js')
     style.
       
@@ -16,23 +17,27 @@ html
               span
                 i.fa.fa-diamond
               span  NiftyKick
-            li.btn.list-group-item(rv-each-widget="widgets" rv-on-click="widgetMenuClicked" style="text-align: inherit;")
-              span [[widget.name]]
-              span(class="label label-default label-pill pull-right") [[widget.notification]]
-          div
-            span
-              a(rv-href="accountUrl")  Link
-            span  to your account for other browsers
+            div.rvHide
+              li.btn.list-group-item(rv-each-widget="widgets" rv-on-click="widgetMenuClicked" style="text-align: inherit;")
+                span [[widget.name]]
+                span(class="label label-default label-pill pull-right" rv-html="widget.notification")
+              div
+                span
+                  a(rv-href="accountUrl")  Link
+                span  to your account for other browsers
         #widgetContent.col-xl-10
-          div.card(rv-each-story="stories")
-            div.card-block
-              button.btn.btn-secondary(style="margin-right:3px;" rv-on-click="storyClicked")
-                i.fa.fa-close
-              a(target="_blank" rv-href="story.commentsUrl")
-                button.btn.btn-secondary( rv-on-click="storyClicked" style="margin-right:3px;")
-                  i.fa.fa-comments
-              span.card-text [[story.title]]
-        
+          #loadingPage
+            h1
+              i(class='fa fa-refresh fa-spin' style="width:100%;text-align: center;")
+          div.rvHide
+            div.card(rv-each-story="stories")
+              div.card-block
+                button.btn.btn-secondary(style="margin-right:3px;" rv-on-click="storyClicked")
+                  i.fa.fa-close
+                a(target="_blank" rv-href="story.commentsUrl")
+                  button.btn.btn-secondary( rv-on-click="storyClicked" style="margin-right:3px;")
+                    i.fa.fa-comments
+                span.card-text [[story.title]]
     script(src="/browserify/index/logic.js")
     script.
       //- var widgetMenu = document.querySelector('#widgetMenu');

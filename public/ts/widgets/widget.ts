@@ -2,7 +2,7 @@ import $ from "jquery"
 import hn from "../../../libs/hn";
 class Widget {
   name = "Widget"
-  notification = "..."
+  notification = "<i class='fa fa-refresh fa-spin'></i>"
   settings = null
   constructor(widget, public viewedItems){
     this.settings = JSON.parse(widget.settings)

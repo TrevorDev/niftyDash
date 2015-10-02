@@ -47,7 +47,8 @@ async function main(){
   //TODO clean this up
   template.selectedWidget = template.widgets[0]
   contentview = r.bind($('#widgetContent'), template.selectedWidget)
-
+  $(".rvHide").css("display", "inherit")
+  $("#loadingPage").css("display", "none");
   //init all widgets
   await objectPromise(template.widgets.map((w)=>w.init()))
   if(template.widgets.length > 0 && template.selectedWidget == null){
