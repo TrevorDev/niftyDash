@@ -1,4 +1,6 @@
 import Sequelize from "sequelize";
-var database = new Sequelize('postgres://docker:docker@dashnifty.cloudapp.net:5432/niftyDash');
+import config from "../libs/config"
+
+var database = new Sequelize(config.database.connectionString);
 
 export default database

@@ -1,6 +1,8 @@
 import express from "express"
-import bodyParser from "body-parser";
+import bodyParser from "body-parser"
 import session from "express-session"
+import config from "../libs/config"
+
 export default {
 	createApp: function(){
 		var app = express();
@@ -10,7 +12,7 @@ export default {
 
 		//TODO make this secret and move to config.ts
 		app.use(session({
-		  secret: 'super secret',
+		  secret: config.session.secret,
 		  resave: false,
 		  saveUninitialized: true
 		}))

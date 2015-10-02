@@ -3,6 +3,7 @@ require("babel/polyfill")
 import appFactory from "./libs/appFactory";
 import preloadDB from "./libs/preLoadDB";
 import browserify from "browserify"
+import config from "./libs/config"
 
 //init modules after db
 import db from "./libs/database";
@@ -31,13 +32,17 @@ async function main(){
 	app.get('/browserify/*', function(req, res) {
 		//TODO: cache this in production or generate all files beforehand
 		let reqFile:string = req.params[0]
-		let stream = browserify(["./public/ts/"+reqFile]).bundle()
-		stream.on("data", function(buffer){
-			res.write(buffer)
-		})
-		stream.on("end", function(){
-			res.end()
-		})
+		if(config.env == "DEV"){
+			let stream = browserify(["./public/ts/"+reqFile]).bundle()
+			stream.on("data", function(buffer){
+				res.write(buffer)
+			})
+			stream.on("end", function(){
+				res.end()
+			})
+		}else{
+			res.sendfile(reqFile, {root: './public/compiledTS'});
+		}
 	});
 
 	app.listen(3000, function(){
