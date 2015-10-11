@@ -13,9 +13,19 @@ import "./models/models";
 import user from "./controllers/user";
 import viewedItem from "./controllers/viewedItem";
 
+function watchAsyncError(af){
+	return async function(res, resp){
+		try{
+			await af(res, resp)
+		}catch(e){
+			console.log(e)
+			console.log(e.stack)
+		}
+	}
+}
 
 async function main(){
-	// await db.sync({force: true})
+	//await db.sync({force: true})
 	// await preloadDB();
 	let app = appFactory.createApp();
 
@@ -23,11 +33,11 @@ async function main(){
 		res.render('index')
 	});
 
-	app.get("/api/user/getWidgets", user.getWidgets)
-	app.post("/api/user/create", user.create)
-	app.post("/api/user/login", user.login)
-	app.post("/api/viewedItem/add", viewedItem.add)
-	app.get("/api/user/getViewedItems", user.getViewedItems)
+	app.get("/api/user/getWidgets", watchAsyncError(user.getWidgets))
+	app.post("/api/user/create", watchAsyncError(user.create))
+	app.post("/api/user/login", watchAsyncError(user.login))
+	app.post("/api/viewedItem/add", watchAsyncError(viewedItem.add))
+	app.get("/api/user/getViewedItems", watchAsyncError(user.getViewedItems))
 
 	app.get('/browserify/*', function(req, res) {
 		//TODO: cache this in production or generate all files beforehand

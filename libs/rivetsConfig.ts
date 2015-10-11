@@ -15,4 +15,17 @@ r.configure({
   }
 })
 
-export default r;
+export default {
+  //overide bind so that unbind returns html back
+  bind: function(selector, template){
+    var origHTML = selector.html()
+    var view:any = r.bind(selector, template)
+    var ret = {
+      unbind: function(){
+        selector.html(origHTML)
+        view.unbind();
+      }
+    }
+    return ret;
+  }
+};
