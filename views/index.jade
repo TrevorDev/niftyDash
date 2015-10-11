@@ -30,21 +30,44 @@ html
                   a(rv-href="accountUrl")  Link
                 span  to your account for other browsers
             
-        #widgetContent.col-xl-10
+        div.col-xl-10
           div(style="width:100%;text-align: center;font-size: 0.7em;") Ver 0.1.0 - Please add any feedback 
             a(href="https://docs.google.com/document/d/1RsXUN85k7vbmU2VrBhYbr17s5elcvTPhGAEqNViqt8c/edit?usp=sharing") here.
-          #loadingPage
-            h1
-              i(class='fa fa-refresh fa-spin' style="width:100%;text-align: center;")
-          div.rvHide
-            div.card(rv-each-story="stories")
+          #widgetConfig
+            div.card
               div.card-block
-                button.btn.btn-secondary(style="margin-right:3px;" rv-on-click="storyClicked")
-                  i.fa.fa-close
-                a(target="_blank" rv-href="story.commentsUrl")
-                  button.btn.btn-secondary( rv-on-click="storyClicked" style="margin-right:3px;")
-                    i.fa.fa-comments
-                span.card-text [[story.title]]
+                form(rv-on-submit="addWidget" id="addForm")
+                  fieldset.form-group
+                    h4.card-title Add Widget
+                    div Type
+                      select.form-control(name="type")
+                        option REDDIT
+                        option HN
+                    div Name
+                    input.form-control(name="name")
+                    button.btn(type="submit") add
+            div.card
+              div.card-block
+                fieldset.form-group
+                  h4.card-title Configure Widget: [[selectedWidget.name]]
+                  div Name
+                  input.form-control(rv-value="selectedWidget.name")
+                  div Settings
+                  textarea.form-control(rows="15" style="width: 100%;" rv-value="selectedWidget.settingsString")
+                  button.btn save
+          #widgetContent
+            #loadingPage
+              h1
+                i(class='fa fa-refresh fa-spin' style="width:100%;text-align: center;")
+            div.rvHide
+              div.card(rv-each-story="stories")
+                div.card-block
+                  button.btn.btn-secondary(style="margin-right:3px;" rv-on-click="storyClicked")
+                    i.fa.fa-close
+                  a(target="_blank" rv-href="story.commentsUrl")
+                    button.btn.btn-secondary( rv-on-click="storyClicked" style="margin-right:3px;")
+                      i.fa.fa-comments
+                  span.card-text [[story.title]]
     script(src="/browserify/index/logic.js")
     script.
       //- var widgetMenu = document.querySelector('#widgetMenu');

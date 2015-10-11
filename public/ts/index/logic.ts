@@ -36,12 +36,25 @@ async function main(){
     },
     configClicked: ()=>{
 
+    },
+    addWidget: (e)=>{
+      e.preventDefault();
+      alert("blam")
+      console.log($("#addForm").serializeArray().reduce(function(obj, item) {
+          obj[item.name] = item.value;
+          return obj;
+      }, {}))
+      return false;
+    },
+    saveWidget: ()=>{
+
     }
   }
 
   //binding sidemenu
   window.history.replaceState(null, null, template.accountUrl);
   var menuView = r.bind($('#sideMenu'), template)
+  var menuView = r.bind($('#widgetConfig'), template)
 
   //create widgets from users widgets
   template.widgets = (await $.get("/api/user/getWidgets"))

@@ -7,8 +7,10 @@ class Widget {
   name = Widget.type;
   notification = "<i class='fa fa-refresh fa-spin'></i>"
   settings = null
+  settingsString = null
   constructor(widget, public viewedItems){
     this.settings = JSON.parse(widget.settings)
+    this.settingsString = JSON.stringify(this.settings, null, 4)
     //console.log(this.settings)
   }
   init = async function(){
