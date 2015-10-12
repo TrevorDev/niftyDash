@@ -7,7 +7,7 @@ export default {
     var num = JSON.parse(result).num;
   	var latest = []
     for(var i = num-19;i<=num;i++){
-        latest.push({link: "http://xkcd.com/"+i, name: i})
+        latest.push({link: "http://xkcd.com/"+i, name: i, id: i})
     }
   	console.log(latest)
     res.send(latest)

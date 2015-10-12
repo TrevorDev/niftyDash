@@ -91,8 +91,8 @@ var widgetList = {
     getStories = async function(){
       var widget = this;
       this.stories = (await $.get("/api/comic/xkcd/latest"))
-        .map((i)=>new Story(widget.name+i.name,i.name, i.link, i.link))
-        .filter((i)=> !this.viewedItems[i.name])
+        .map((i)=>new Story(widget.name+i.id,i.name, i.link, i.link))
+        .filter((i)=> !this.viewedItems[i.id])
       await this.updateNotification()
     }
   }
