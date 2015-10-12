@@ -2,6 +2,7 @@ doctype html
 html
   head
     title Website
+    link(rel="icon" href="/public/img/favicon.ico" type="image/x-icon")
     link(rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css")
     link(rel="stylesheet" href="/bower_components/font-awesome/css/font-awesome.min.css")
     link(rel="stylesheet" href="/public/css/main.css")
@@ -21,10 +22,11 @@ html
               li.btn.list-group-item(rv-each-widget="widgets" rv-on-click="widgetMenuClicked" style="text-align: inherit;")
                 span [[widget.name]]
                 span(class="label label-default label-pill pull-right" rv-html="widget.notification")
-              li.btn.list-group-item(id="config")
+              li.btn.list-group-item(id="config" rv-on-click="configClicked" style="text-align: inherit;")
                 span
                   i.fa.fa-gears
-                span  Add/Configure widgets
+                span(rv-if="displayConfig")  Hide Config
+                span(rv-unless="displayConfig")  Add/Configure widgets
               div
                 span
                   a(rv-href="accountUrl")  Link
@@ -33,28 +35,39 @@ html
         div.col-xl-10
           div(style="width:100%;text-align: center;font-size: 0.7em;") Ver 0.1.0 - Please add any feedback 
             a(href="https://docs.google.com/document/d/1RsXUN85k7vbmU2VrBhYbr17s5elcvTPhGAEqNViqt8c/edit?usp=sharing") here.
-          #widgetConfig
-            div.card
-              div.card-block
-                form(rv-on-submit="addWidget" id="addForm")
-                  fieldset.form-group
-                    h4.card-title Add Widget
-                    div Type
-                      select.form-control(name="type")
-                        option REDDIT
-                        option HN
-                    div Name
-                    input.form-control(name="name")
-                    button.btn(type="submit") add
-            div.card
-              div.card-block
-                fieldset.form-group
-                  h4.card-title Configure Widget: [[selectedWidget.name]]
-                  div Name
-                  input.form-control(rv-value="selectedWidget.name")
-                  div Settings
-                  textarea.form-control(rows="15" style="width: 100%;" rv-value="selectedWidget.settingsString")
-                  button.btn save
+          #widgetConfig.rvHide
+            div(rv-show="displayConfig")
+              div.card
+                div.card-block
+                  form(rv-on-submit="saveWidget" id="saveForm")
+                    fieldset.form-group
+                      h4.card-title Configure Widget: [[selectedWidget.name]]
+                      div Name
+                      input.form-control(rv-value="selectedWidget.name" name="name")
+                      div Settings
+                      textarea.form-control(rows="15" style="width: 100%;" rv-value="selectedWidget.settingsString" name="settings")
+                      button.btn 
+                        span
+                          i.fa.fa-save
+                        span  save
+                      span(id="saveMsg")
+              div.card
+                div.card-block
+                  form(rv-on-submit="addWidget" id="addForm")
+                    fieldset.form-group
+                      h4.card-title Add Widget
+                      div Type
+                        select.form-control(name="type")
+                          option REDDIT
+                          option HN
+                          option XKCD
+                      div Name
+                      input.form-control(name="name")
+                      button.btn(type="submit")
+                        span
+                          i.fa.fa-plus
+                        span  add
+                      span(id="addMsg")
           #widgetContent
             #loadingPage
               h1
@@ -67,7 +80,8 @@ html
                   a(target="_blank" rv-href="story.commentsUrl")
                     button.btn.btn-secondary( rv-on-click="storyClicked" style="margin-right:3px;")
                       i.fa.fa-comments
-                  span.card-text [[story.title]]
+                  span.card-text 
+                    a(target="_blank" rv-href="story.url") [[story.title]]
     script(src="/browserify/index/logic.js")
     script.
       //- var widgetMenu = document.querySelector('#widgetMenu');

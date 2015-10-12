@@ -29,7 +29,7 @@ import Sequelize from "sequelize";
 //   updateNotification
 //   customLogic
 
-
+//TODO make this enum with keys from lib/wigets.ts
 let TYPE = {REDDIT: "REDDIT", HN: "HN", XKCD: "XKCD"}
 
 let Widget = db.define<Sequelize.Instance<any, any>, any>("widget", {

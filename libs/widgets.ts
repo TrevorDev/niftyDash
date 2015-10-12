@@ -4,11 +4,14 @@ import hn from "./hn";hn;//dont know why i need to do this???
 class Widget {
   static defaultSettings = {}
   static type = "Widget"
-  name = Widget.type;
+  name = "";
+  id:number;
   notification = "<i class='fa fa-refresh fa-spin'></i>"
   settings = null
   settingsString = null
   constructor(widget, public viewedItems){
+    this.id = widget.id
+    this.name = widget.name;
     this.settings = JSON.parse(widget.settings)
     this.settingsString = JSON.stringify(this.settings, null, 4)
     //console.log(this.settings)
@@ -52,7 +55,7 @@ class Story{
 }
 
 
-
+//TODO add better default name or rename types to be better
 var widgetList = {
   REDDIT: class redditWidget extends newsfeedWidget {
     static type = "REDDIT"
@@ -60,7 +63,6 @@ var widgetList = {
       subreddits: "TODAYILEARNED+WORLDNEWS+ASKREDDIT+TECHNOLOGY+BESTOF+IAMA+SMASHBROS+MUSIC+HIPHOPHEADS+COMICS+PROGRAMMERHUMOR+FUTUROLOGY+PROGRAMMING+PERSONALFINANCE+GAMEDEV+ENTREPRENEUR+INVESTING+MASHUPS+FINANCIALINDEPENDENCE+RETIREDGIF+LIGHTBULB+STARTUPS+ZENHABITS+SMALLBUSINESS+NODE+CODING+INDIEGAMES+DATASETS+SOMEBODYMAKETHIS+ENTREPRENEURRIDEALONG+SIDEPROJECT+RUNITUP+ENTREPENEUR+CODEPROJECTS+SMALLBUISNESS+NODEJS+KOAJS+NOBADCONTENT+COMBOHYPE",
       limit: 100
     })
-    name = "Reddit"
     getStories = async function(){
       var res = await $.get("http://www.reddit.com/r/"+this.settings.subreddits+"/top.json?limit="+this.settings.limit)
       var widget = this;
@@ -75,11 +77,21 @@ var widgetList = {
     static defaultSettings = JSON.stringify({
       limit: 100
     })
-    name = "Hacker News"
     getStories = async function(){
       var widget = this;
-      this.stories = (await hn.getTopStories(100))
+      this.stories = (await hn.getTopStories(this.settings.limit))
         .map((i)=>new Story(widget.name+i.id,i.title, i.url, "https://news.ycombinator.com/item?id="+i.id))
+        .filter((i)=> !this.viewedItems[i.id])
+      await this.updateNotification()
+    }
+  },
+  XKCD: class xkcdWidget extends newsfeedWidget {
+    static type = "XKCD"
+    static defaultSettings = JSON.stringify({})
+    getStories = async function(){
+      var widget = this;
+      this.stories = (await $.get("/api/comic/xkcd/latest"))
+        .map((i)=>new Story(widget.name+i.id,i.name, i.link, i.link))
         .filter((i)=> !this.viewedItems[i.id])
       await this.updateNotification()
     }

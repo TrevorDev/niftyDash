@@ -11,3 +11,6 @@
 /// <reference path="jquery/jquery.d.ts" />
 /// <reference path="rivets/rivets.d.ts" />
 /// <reference path="express-session/express-session.d.ts" />
+/// <reference path="form-data/form-data.d.ts" />
+/// <reference path="request-promise/request-promise.d.ts" />
+/// <reference path="request/request.d.ts" />

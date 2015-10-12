@@ -24,7 +24,7 @@
       "commit": "67605e10f6eb01c9d4a0d13719d804d6dea9e1cb"
     },
     "bluebird/bluebird.d.ts": {
-      "commit": "d2bab5738b84b91d8ee18a68c7b379a9714cf82f"
+      "commit": "3fc1377ce29dd9670975cb68615edf1b819fc4a5"
     },
     "validator/validator.d.ts": {
       "commit": "d2bab5738b84b91d8ee18a68c7b379a9714cf82f"
@@ -43,6 +43,15 @@
     },
     "express-session/express-session.d.ts": {
       "commit": "b937e64fc9245d299fa4ba26c6eddbeaed42a920"
+    },
+    "request-promise/request-promise.d.ts": {
+      "commit": "3fc1377ce29dd9670975cb68615edf1b819fc4a5"
+    },
+    "request/request.d.ts": {
+      "commit": "3fc1377ce29dd9670975cb68615edf1b819fc4a5"
+    },
+    "form-data/form-data.d.ts": {
+      "commit": "3fc1377ce29dd9670975cb68615edf1b819fc4a5"
     }
   }
 }

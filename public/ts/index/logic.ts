@@ -6,7 +6,7 @@ import widgets from "../../../libs/widgets";
 import objectPromise from "../../../libs/objectPromise";
 
 async function main(){
-
+  //$.get("/api/comic/xkcd/latest")
   //get url params
   var ar:Array<string> = (window.location.search.match(/[\?&](.*?)=([^&#]*)/g) || []);
   var params:any = ar.reduce((prev, cur)=>{prev[cur.split("=")[0].slice(1)]=cur.split("=")[1];return prev},{})
@@ -26,6 +26,7 @@ async function main(){
     widgets: [],
     selectedWidget: null,
     accountUrl: "/?account="+params.account,
+    displayConfig:false,
     widgetMenuClicked: (event, binding)=>{
       template.selectedWidget = binding.widget
       contentview.unbind()
@@ -35,19 +36,32 @@ async function main(){
       $("#loadingPage").css("display", "none");
     },
     configClicked: ()=>{
-
+      template.displayConfig = !template.displayConfig
     },
-    addWidget: (e)=>{
+    addWidget: async (e)=>{
       e.preventDefault();
-      alert("blam")
-      console.log($("#addForm").serializeArray().reduce(function(obj, item) {
+      $("#addMsg").html("please wait...")
+      console.log("one")
+      console.log($("#addMsg").html())
+      var formData = $("#addForm").serializeArray().reduce(function(obj, item) {
           obj[item.name] = item.value;
           return obj;
-      }, {}))
-      return false;
+      }, {})
+      await $.post("/api/user/addWidget", formData)
+      $("#addMsg").html("Done! Please refresh the page to see changes.")
     },
-    saveWidget: ()=>{
-
+    saveWidget: async (e)=>{
+      e.preventDefault();
+      $("#saveMsg").html("please wait...")
+      var formData:any = $("#saveForm").serializeArray().reduce(function(obj, item) {
+          obj[item.name] = item.value;
+          return obj;
+      }, {})
+      formData.id = template.selectedWidget.id;
+      console.log(formData)
+      //this should be put but jquery doesnt care enuf
+      await $.post("/api/user/saveWidget", formData)
+      $("#saveMsg").html("Done! Please refresh the page to see changes.")
     }
   }
 

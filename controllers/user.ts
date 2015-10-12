@@ -1,4 +1,6 @@
 import User from "../models/user"
+import Widget from "../models/widget"
+import widgets from "../libs/widgets";
 import op from "../libs/objectPromise"
 
 function guid() {
@@ -31,5 +33,28 @@ export default {
     var u = await User.findById(req.session.userID)
     var items = (await u.getViewedItems()).map((i)=>i.item)
     res.send(items)
+  },
+  addWidget: async function(req, res){
+    //TODO add error handling
+    var u = await User.findById(req.session.userID)
+    var w = await Widget.create({
+        name: req.body.name,
+        type: req.body.type,
+        settings: widgets.widgetList[req.body.type].defaultSettings
+    })
+    u.addWidget(w)
+    res.send()
+  },
+  saveWidget: async function(req, res){
+    //TODO add error handling
+    var u = await User.findById(req.session.userID)
+    console.log("\n\n\n")
+    console.log(req.body)
+    var w = await u.getWidgets({where:{id: req.body.id}})
+    console.log(w.length)
+    w[0].settings = req.body.settings
+    w[0].name = req.body.name
+    await w[0].save()
+    res.send()
   }
 }

@@ -11,6 +11,7 @@ import "./libs/database";
 import "./models/models";
 
 import user from "./controllers/user";
+import comic from "./controllers/comic";
 import viewedItem from "./controllers/viewedItem";
 
 function watchAsyncError(af){
@@ -36,8 +37,12 @@ async function main(){
 	app.get("/api/user/getWidgets", watchAsyncError(user.getWidgets))
 	app.post("/api/user/create", watchAsyncError(user.create))
 	app.post("/api/user/login", watchAsyncError(user.login))
+	app.post("/api/user/addWidget", watchAsyncError(user.addWidget))
+	app.post("/api/user/saveWidget", watchAsyncError(user.saveWidget))
 	app.post("/api/viewedItem/add", watchAsyncError(viewedItem.add))
 	app.get("/api/user/getViewedItems", watchAsyncError(user.getViewedItems))
+
+	app.get('/api/comic/xkcd/latest', watchAsyncError(comic.xkcd))
 
 	app.get('/browserify/*', function(req, res) {
 		//TODO: cache this in production or generate all files beforehand
