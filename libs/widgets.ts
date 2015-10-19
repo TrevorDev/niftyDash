@@ -1,5 +1,6 @@
 import $ from "jquery"
 import hn from "./hn";hn;//dont know why i need to do this???
+import op from "../libs/objectPromise";op;
 //base
 class Widget {
   static defaultSettings = {}
@@ -93,6 +94,41 @@ var widgetList = {
       this.stories = (await $.get("/api/comic/xkcd/latest"))
         .map((i)=>new Story(widget.name+i.id,i.name, i.link, i.link))
         .filter((i)=> !this.viewedItems[i.id])
+      await this.updateNotification()
+    }
+  },
+  CANDH: class cAndHWidget extends newsfeedWidget {
+    static type = "CANDH"
+    static defaultSettings = JSON.stringify({})
+    getStories = async function(){
+      var widget = this;
+      this.stories = (await $.get("/api/comic/cAndH/latest"))
+        .map((i)=>new Story(widget.name+i.id,i.name, i.link, i.link))
+        .filter((i)=> !this.viewedItems[i.id])
+      await this.updateNotification()
+    }
+  },
+  DILBERT: class dilbertWidget extends newsfeedWidget {
+    static type = "DILBERT"
+    static defaultSettings = JSON.stringify({})
+    getStories = async function(){
+      var widget = this;
+      this.stories = (await $.get("/api/comic/dilbert/latest"))
+        .map((i)=>new Story(widget.name+i.id,i.name, i.link, i.link))
+        .filter((i)=> !this.viewedItems[i.id])
+      await this.updateNotification()
+    }
+  },
+  TV: class tvWidget extends newsfeedWidget {
+    static type = "TV"
+    static defaultSettings = JSON.stringify({
+      shows: ["silicon-valley-2014"]
+    })
+    getStories = async function(){
+      var widget = this;
+      this.stories = (await op(this.settings.shows.map((s)=>{
+        return ($.get("/api/tv/"+s))
+      }))).reduce((prev, cur)=>{return prev.concat(cur.map((ep)=>new Story(widget.name+ep.id, ep.id, ep.link, ep.link)))},[])
       await this.updateNotification()
     }
   }

@@ -12,12 +12,13 @@ import "./models/models";
 
 import user from "./controllers/user";
 import comic from "./controllers/comic";
+import tvShow from "./controllers/tvShow";
 import viewedItem from "./controllers/viewedItem";
 
 function watchAsyncError(af){
-	return async function(res, resp){
+	return async function(req, resp){
 		try{
-			await af(res, resp)
+			await af(req, resp)
 		}catch(e){
 			console.log(e)
 			console.log(e.stack)
@@ -43,6 +44,10 @@ async function main(){
 	app.get("/api/user/getViewedItems", watchAsyncError(user.getViewedItems))
 
 	app.get('/api/comic/xkcd/latest', watchAsyncError(comic.xkcd))
+	app.get('/api/comic/dilbert/latest', watchAsyncError(comic.dilbert))
+	app.get('/api/comic/cAndH/latest', watchAsyncError(comic.cAndH))
+
+	app.get('/api/tv/:show', watchAsyncError(tvShow.tv))
 
 	app.get('/browserify/*', function(req, res) {
 		//TODO: cache this in production or generate all files beforehand

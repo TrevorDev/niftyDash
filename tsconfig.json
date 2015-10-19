@@ -24,6 +24,7 @@
     "files": [
         "./app.ts",
         "./controllers/comic.ts",
+        "./controllers/tvShow.ts",
         "./controllers/user.ts",
         "./controllers/viewedItem.ts",
         "./libs/appFactory.ts",

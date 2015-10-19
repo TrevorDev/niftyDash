@@ -36,6 +36,8 @@ export default {
   },
   addWidget: async function(req, res){
     //TODO add error handling
+    console.log(req.body.type)
+    console.log(widgets.widgetList[req.body.type])
     var u = await User.findById(req.session.userID)
     var w = await Widget.create({
         name: req.body.name,
