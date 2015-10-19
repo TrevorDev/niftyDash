@@ -35,7 +35,7 @@ export default {
   		return p;
   	}, [])
   	.map(function(i){
-  		return {link: "http://dilbert.com/strip/"+i, name: i};
+  		return {link: "http://dilbert.com/strip/"+i, name: i, id: i};
   	})
   	res.send(latest)
   }
