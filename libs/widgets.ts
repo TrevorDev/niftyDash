@@ -128,7 +128,9 @@ var widgetList = {
       var widget = this;
       this.stories = (await op(this.settings.shows.map((s)=>{
         return ($.get("/api/tv/"+s))
-      }))).reduce((prev, cur)=>{return prev.concat(cur.map((ep)=>new Story(widget.name+ep.id, ep.id, ep.link, ep.link)))},[])
+      })))
+      .reduce((prev, cur)=>{return prev.concat(cur.map((ep)=>new Story(widget.name+ep.id, ep.id, ep.link, ep.link)))},[])
+      .filter((i)=> !this.viewedItems[i.id])
       await this.updateNotification()
     }
   }
