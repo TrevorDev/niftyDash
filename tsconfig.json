@@ -57,5 +57,8 @@
         "./typings/serve-static/serve-static.d.ts",
         "./typings/tsd.d.ts",
         "./typings/validator/validator.d.ts"
-    ]
+    ],
+    "atom": {
+        "rewriteTsconfig": true
+    }
 }

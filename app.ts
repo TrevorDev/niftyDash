@@ -29,7 +29,14 @@ function watchAsyncError(af){
 async function main(){
 	//await db.sync({force: true})
 	// await preloadDB();
-	let app = appFactory.createApp();
+	console.log("hit")
+	let app;
+	try{
+		app = appFactory.createApp();
+	}catch(e){
+		console.log(e)
+	}
+
 
 	app.get('/',async function(req, res) {
 		res.render('index')
@@ -69,4 +76,8 @@ async function main(){
 	    console.log("Server running");
 	});
 }
-main()
+try{
+	main()
+}catch(err){
+	console.log("hit")
+}
