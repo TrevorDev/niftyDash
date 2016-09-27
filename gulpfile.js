@@ -36,8 +36,8 @@ gulp.task('default', function () {
 
 var compileBabel = function(cb){
   var excludedFolders = ["bower_components","node_modules","typings"]
-  var filesToAdd = ["app.js"]
-  var babelFolders = fs.readdirSync("./")
+  var filesToAdd = []
+  var babelFolders = fs.readdirSync("./public/")
   .filter(function(dir){
     return dir.indexOf(".") == -1
   }).filter(function(dir){
