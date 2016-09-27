@@ -3,16 +3,30 @@ import request = require("request-promise")
 export default {
   tv: async function(req, res){
     var show = req.params.show
-  	var result:any = await request('http://www.solarmovie.is/tv/'+show);
-  	var regex = new RegExp('<a href="/tv/'+show+'/season-(\\d+)/episode-(\\d+)/" class="linkCount typicalGrey">\\s*(\\d+) links</a>', "g")
+    var rootUrl = 'http://projectfreetv.us/internet/';
+  	var result:any = await request(rootUrl+show);
+    var latestSeasonReg = new RegExp('<td class="mnlcategorylist" width="99%"><a href="(.*?)"', "g")
+    var latestSeasonUrl = ""
+    while (matches = latestSeasonReg.exec(result)) {
+      latestSeasonUrl = rootUrl+"/"+matches[1]
+      console.log(latestSeasonUrl)
+    }
+    result = await request(latestSeasonUrl);
+
+  	var regex = new RegExp('<a href="(.*?)" title="(.*?)" style="text-decoration: none; color: black;">', "g")
+
   	var matches, output = [];
   	while (matches = regex.exec(result)) {
+        var link = matches[1]
+        var seasonEpRegex = new RegExp('season-(.*?)/episode-(.*?)/', "g")
+        var match = seasonEpRegex.exec(link)
+        var season = parseInt(match[1])
+        var episode = parseInt(match[2])
   	    output.push({
-  	    	season: parseInt(matches[1]),
-  	    	episode: parseInt(matches[2]),
-          id: "("+show+") S"+parseInt(matches[1])+"-E"+parseInt(matches[2]),
-  	    	links: parseInt(matches[3]),
-  	    	link: "http://www.solarmovie.is/tv/"+show+"/season-"+matches[1]+"/episode-"+matches[2]
+  	    	season: season,
+  	    	episode: episode,
+          id: "("+show+") S"+season+"-E"+episode,
+  	    	link: link
   	    });
   	}
   	output = output.filter(function(e){
