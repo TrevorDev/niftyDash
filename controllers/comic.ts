@@ -1,4 +1,4 @@
-import request from "request-promise"
+import request = require("request-promise")
 
 export default {
   xkcd: async function(req, res){

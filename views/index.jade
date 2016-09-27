@@ -18,34 +18,35 @@ html
               span
                 i.fa.fa-diamond
               span  NiftyKick
-            div.rvHide
-              li.btn.list-group-item(rv-each-widget="widgets" rv-on-click="widgetMenuClicked" style="text-align: inherit;")
-                span [[widget.name]]
-                span(class="label label-default label-pill pull-right" rv-html="widget.notification")
-              li.btn.list-group-item(id="config" rv-on-click="configClicked" style="text-align: inherit;")
+            div.hidden
+              li.btn.list-group-item(v-for="widget in widgets" v-on:click="widgetMenuClicked(widget)" style="text-align: inherit;")
+                span {{widget.name}}
+                span(class="label label-default label-pill pull-right")
+                  {{{widget.notification}}}
+              li.btn.list-group-item(id="config" v-on:click="configClicked()" style="text-align: inherit;")
                 span
                   i.fa.fa-gears
-                span(rv-if="displayConfig")  Hide Config
-                span(rv-unless="displayConfig")  Add/Configure widgets
+                span(v-if="displayConfig")  Hide Config
+                span(v-else)  Add/Configure widgets
               div
                 span
-                  a(rv-href="accountUrl")  Link
+                  a(v-bind:href="accountUrl")  Link
                 span  to your account for other browsers
             
         div.col-xl-10
           div(style="width:100%;text-align: center;font-size: 0.7em;") Ver 0.1.1 - Please add any feedback 
             a(href="https://docs.google.com/document/d/1RsXUN85k7vbmU2VrBhYbr17s5elcvTPhGAEqNViqt8c/edit?usp=sharing") here.
-          #widgetConfig.rvHide
-            div(rv-show="displayConfig")
+          #widgetConfig.hidden
+            div(v-if="displayConfig")
               div.card
                 div.card-block
-                  form(rv-on-submit="saveWidget" id="saveForm")
+                  form(v-on:submit="saveWidget($event)" id="saveForm")
                     fieldset.form-group
-                      h4.card-title Configure Widget: [[selectedWidget.name]]
+                      h4.card-title Configure Widget: {{selectedWidget.name}}
                       div Name
-                      input.form-control(rv-value="selectedWidget.name" name="name")
+                      input.form-control(v-model="selectedWidget.name" name="name")
                       div Settings
-                      textarea.form-control(rows="15" style="width: 100%;" rv-value="selectedWidget.settingsString" name="settings")
+                      textarea.form-control(rows="15" style="width: 100%;" v-model="selectedWidget.settingsString" name="settings")
                       button.btn 
                         span
                           i.fa.fa-save
@@ -53,7 +54,7 @@ html
                       span(id="saveMsg")
               div.card
                 div.card-block
-                  form(rv-on-submit="addWidget" id="addForm")
+                  form(v-on:submit="addWidget($event)" id="addForm")
                     fieldset.form-group
                       h4.card-title Add Widget
                       div Type
@@ -75,16 +76,16 @@ html
             #loadingPage
               h1
                 i(class='fa fa-refresh fa-spin' style="width:100%;text-align: center;")
-            div.rvHide
-              div.card(rv-each-story="stories")
+            div.hidden
+              div.card(v-for="story in stories")
                 div.card-block
-                  button.btn.btn-secondary(style="margin-right:3px;" rv-on-click="storyClicked")
+                  button.btn.btn-secondary(style="margin-right:3px;" v-on:click="storyClicked(story)")
                     i.fa.fa-close
-                  a(target="_blank" rv-href="story.commentsUrl")
-                    button.btn.btn-secondary( rv-on-click="storyClicked" style="margin-right:3px;")
+                  a(target="_blank" v-bind:href="story.commentsUrl")
+                    button.btn.btn-secondary( v-on:click="storyClicked(story)" style="margin-right:3px;")
                       i.fa.fa-comments
                   span.card-text 
-                    a(target="_blank" rv-href="story.url" rv-on-click="storyClicked") [[story.title]]
+                    a(target="_blank" v-bind:href="story.url" v-on:click="storyClicked(story)") {{story.title}}
     script(src="/browserify/index/logic.js")
     script.
       //- var widgetMenu = document.querySelector('#widgetMenu');

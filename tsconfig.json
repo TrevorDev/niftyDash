@@ -1,64 +1,26 @@
 {
-    "version": "1.5.0-beta",
-    "externalTranspiler": "babel",
     "compilerOptions": {
         "target": "es6",
         "module": "commonjs",
+        "moduleResolution": "node",
         "isolatedModules": false,
         "jsx": "react",
-        "experimentalAsyncFunctions": true,
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
         "declaration": false,
         "noImplicitAny": false,
+        "noImplicitUseStrict": false,
         "removeComments": true,
         "noLib": false,
         "preserveConstEnums": true,
         "suppressImplicitAnyIndexErrors": true
     },
-    "filesGlob": [
-        "./**/*.ts",
-        "./**/*.tsx",
-        "!./node_modules/**/*"
+    "exclude": [
+        "node_modules"
     ],
-    "files": [
-        "./app.ts",
-        "./controllers/comic.ts",
-        "./controllers/tvShow.ts",
-        "./controllers/user.ts",
-        "./controllers/viewedItem.ts",
-        "./libs/appFactory.ts",
-        "./libs/config.ts",
-        "./libs/database.ts",
-        "./libs/hn.ts",
-        "./libs/objectPromise.ts",
-        "./libs/preLoadDB.ts",
-        "./libs/rivetsConfig.ts",
-        "./libs/widgets.ts",
-        "./models/models.ts",
-        "./models/user.ts",
-        "./models/viewedItem.ts",
-        "./models/widget.ts",
-        "./public/ts/index/logic.ts",
-        "./typings/bluebird/bluebird.d.ts",
-        "./typings/body-parser/body-parser.d.ts",
-        "./typings/browserify/browserify.d.ts",
-        "./typings/express-session/express-session.d.ts",
-        "./typings/express/express.d.ts",
-        "./typings/form-data/form-data.d.ts",
-        "./typings/jquery/jquery.d.ts",
-        "./typings/lodash/lodash.d.ts",
-        "./typings/mime/mime.d.ts",
-        "./typings/node/node.d.ts",
-        "./typings/request-promise/request-promise.d.ts",
-        "./typings/request/request.d.ts",
-        "./typings/rivets/rivets.d.ts",
-        "./typings/sequelize/sequelize.d.ts",
-        "./typings/serve-static/serve-static.d.ts",
-        "./typings/tsd.d.ts",
-        "./typings/validator/validator.d.ts"
-    ],
+    "compileOnSave": true,
+    "buildOnSave": false,
     "atom": {
-        "rewriteTsconfig": true
+        "rewriteTsconfig": false
     }
 }

@@ -1,16 +1,21 @@
 import db from "../libs/database"
 import ViewedItem from "../models/viewedItem";
 import Widget from "../models/widget";
-import Sequelize from "sequelize";
+import Sequelize = require("sequelize")
 import op from "../libs/objectPromise"
-interface userS extends Sequelize.Instance<any, any> {
+interface userS extends Sequelize.Instance<any> {
   addWidget:any;
   getWidgets:any;
   addViewedItem:any;
   getViewedItems:any;
   id:number;
 }
-var User = db.define<userS, any>("user", {
+
+interface IUser extends Sequelize.Model<userS, any> {
+  static?:any
+}
+
+var User:IUser = db.define<userS, any>("user", {
   username: Sequelize.STRING,
   password: Sequelize.STRING,
   account: Sequelize.STRING(512)

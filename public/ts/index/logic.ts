@@ -1,7 +1,5 @@
-require("babel/polyfill")
-
-import $ from "jquery"
-import r from "../../../libs/rivetsConfig";
+import $ = require("jquery")
+import Vue = require("vue");
 import widgets from "../../../libs/widgets";
 import objectPromise from "../../../libs/objectPromise";
 
@@ -21,18 +19,27 @@ async function main(){
   var viewedItems = (await $.get("/api/user/getViewedItems")).reduce((prev, cur)=>{prev[cur]=true;return prev},{})
 
   //setup templates
-  var contentview:any = {unbind:()=>{}}
+  var contentview:any = {$destroy:()=>{}}
+  var origView = $('#widgetContent').html()
+
   var template = {
     widgets: [],
     selectedWidget: null,
     accountUrl: "/?account="+params.account,
     displayConfig:false,
-    widgetMenuClicked: (event, binding)=>{
-      template.selectedWidget = binding.widget
-      contentview.unbind()
+    widgetMenuClicked: (widget)=>{
+      console.log("clicked")
+      template.selectedWidget = widget
+      contentview.$destroy()
+      $('#widgetContent').html(origView)
       //TODO figure out if it is a bug with rivets that this leaks memory???
-      contentview = r.bind($('#widgetContent'), template.selectedWidget)
-      $(".rvHide").css("display", "inherit")
+      contentview = new Vue({
+        el: '#widgetContent',
+        data: template.selectedWidget,
+        methods: template.selectedWidget
+      })
+      // contentview = r.bind($('#widgetContent'), template.selectedWidget)
+      $(".hidden").css("display", "inherit")
       $("#loadingPage").css("display", "none");
     },
     configClicked: ()=>{
@@ -67,8 +74,23 @@ async function main(){
 
   //binding sidemenu
   window.history.replaceState(null, null, template.accountUrl);
-  var menuView = r.bind($('#sideMenu'), template)
-  var menuView = r.bind($('#widgetConfig'), template)
+
+  //todo get rid of this var?
+  var methods:any = template;
+  new Vue({
+    el: '#sideMenu',
+    data: template,
+    methods: methods
+  })
+
+  new Vue({
+    el: '#widgetConfig',
+    data: template,
+    methods: methods
+  })
+
+  // var menuView = r.bind($(), template)
+  // var menuView = r.bind($('#widgetConfig'), template)
 
   //create widgets from users widgets
   template.widgets = (await $.get("/api/user/getWidgets"))
@@ -77,7 +99,7 @@ async function main(){
     .map((w) => new w.class(w.widget, viewedItems))
 
   //TODO clean this up
-  template.widgetMenuClicked(null, {widget: template.widgets[0]});
+  template.widgetMenuClicked(template.widgets[0]);
 
   //init all widgets
   await objectPromise(template.widgets.map((w)=>w.init()))

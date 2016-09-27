@@ -1,6 +1,6 @@
-import express from "express"
-import bodyParser from "body-parser"
-import session from "express-session"
+import express = require("express")
+import bodyParser = require("body-parser")
+import session = require("express-session")
 import config from "../libs/config"
 
 export default {

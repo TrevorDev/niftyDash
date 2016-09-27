@@ -1,4 +1,4 @@
-import $ from "jquery"
+import $ = require("jquery")
 import hn from "./hn";hn;//dont know why i need to do this???
 import op from "../libs/objectPromise";op;
 //base
@@ -37,13 +37,13 @@ class newsfeedWidget extends Widget {
   updateNotification = async function(){
     this.notification = this.stories.length+""
   }
-  storyClicked = async (event, binding)=>{
+  storyClicked = async (story)=>{
     setTimeout(async ()=>{
       console.log(this.name)
-      console.log(binding.story.title)
-      console.log(binding.story.id)
-      $.post("/api/viewedItem/add", {item: binding.story.id})
-      this.stories = this.stories.filter((s)=>s.id != binding.story.id)
+      console.log(story.title)
+      console.log(story.id)
+      $.post("/api/viewedItem/add", {item: story.id})
+      this.stories = this.stories.filter((s)=>s.id != story.id)
 
       await this.updateNotification()
     },0)

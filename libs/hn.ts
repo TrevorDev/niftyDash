@@ -1,4 +1,4 @@
-import $ from "jquery"
+import $ = require("jquery")
 var hn = {
   getDetails: function(data){
       var deff = $.map(data, function(obj, num){

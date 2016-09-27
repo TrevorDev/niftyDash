@@ -1,5 +1,5 @@
 import db from "../libs/database";
-import Sequelize from "sequelize";
+import Sequelize = require("sequelize");
 // enum WidgetType {
 //     NEWSFEED
 // }
@@ -32,11 +32,17 @@ import Sequelize from "sequelize";
 //TODO make this enum with keys from lib/wigets.ts
 let TYPE = {REDDIT: "REDDIT", HN: "HN", XKCD: "XKCD"}
 
-let Widget = db.define<Sequelize.Instance<any, any>, any>("widget", {
+interface IWidget extends Sequelize.Model<any, any> {
+  static?:any
+}
+
+
+let Widget:IWidget = db.define<Sequelize.Instance<any>, any>("widget", {
   name: Sequelize.STRING,
   type: Sequelize.STRING,
   settings: Sequelize.STRING(2056)
 })
+
 Widget.static = {
   TYPE: TYPE
 }

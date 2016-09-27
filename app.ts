@@ -1,14 +1,14 @@
-require("babel/polyfill")
+//require("babel/polyfill")
 
 import appFactory from "./libs/appFactory";
 import preloadDB from "./libs/preLoadDB";
-import browserify from "browserify"
+import browserify = require("browserify")
 import config from "./libs/config"
 
 //init modules after db
 import db from "./libs/database";
 import "./libs/database";
-import "./models/models";
+import "./models/models"
 
 import user from "./controllers/user";
 import comic from "./controllers/comic";
@@ -29,12 +29,13 @@ function watchAsyncError(af){
 async function main(){
 	//await db.sync({force: true})
 	// await preloadDB();
-	console.log("hit")
+	//console.log(appFactory)
 	let app;
 	try{
 		app = appFactory.createApp();
 	}catch(e){
 		console.log(e)
+		console.log(e.stack)
 	}
 
 
