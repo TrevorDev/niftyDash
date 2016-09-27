@@ -9,7 +9,6 @@ export default {
     var latestSeasonUrl = ""
     while (matches = latestSeasonReg.exec(result)) {
       latestSeasonUrl = rootUrl+"/"+matches[1]
-      console.log(latestSeasonUrl)
     }
     result = await request(latestSeasonUrl);
 
