@@ -1,3 +1,60 @@
 .hidden {
   display: none;
 }
+
+
+/*DARK THEME*/
+body {
+  background: #262831;
+  color: #9DA1B4;
+}
+
+.list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover {
+  border: 1px solid #1B1C22;
+  background: #31343F;
+  color: #dadff3;
+}
+
+a {
+  color: #7BB9FD;
+}
+
+/*THESE ARE THE SAME*/
+.card {
+  border: 1px solid #1B1C22;
+  background: #31343F;
+  color: #9DA1B4;
+}
+
+.btn {
+  border: 1px solid #1B1C22;
+  background: #31343F;
+  color: #9DA1B4;
+}
+
+.btn:hover {
+  border: 1px solid #1B1C22;
+  background: #31343F;
+  color: #9DA1B4;
+}
+
+.btn .label {
+  border: 1px solid #1B1C22;
+  background: #31343F;
+  color: #9DA1B4;
+}
+
+/*DARK SCROLLBAR*/
+::-webkit-scrollbar {
+    height: 12px;
+	width: 12px;
+	background: #000;
+    }
+::-webkit-scrollbar-thumb {
+    background: #393812;
+    -webkit-border-radius: 1ex;
+    -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.75);
+}
+::-webkit-scrollbar-corner {
+    background: #000;
+}

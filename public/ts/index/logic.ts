@@ -4,7 +4,6 @@ import widgets from "../../../libs/widgets";
 import objectPromise from "../../../libs/objectPromise";
 
 async function main(){
-  //$.get("/api/comic/xkcd/latest")
   //get url params
   var ar:Array<string> = (window.location.search.match(/[\?&](.*?)=([^&#]*)/g) || []);
   var params:any = ar.reduce((prev, cur)=>{prev[cur.split("=")[0].slice(1)]=cur.split("=")[1];return prev},{})
@@ -28,17 +27,14 @@ async function main(){
     accountUrl: "/?account="+params.account,
     displayConfig:false,
     widgetMenuClicked: (widget)=>{
-      console.log("clicked")
       template.selectedWidget = widget
       contentview.$destroy()
       $('#widgetContent').html(origView)
-      //TODO figure out if it is a bug with rivets that this leaks memory???
       contentview = new Vue({
         el: '#widgetContent',
         data: template.selectedWidget,
         methods: template.selectedWidget
       })
-      // contentview = r.bind($('#widgetContent'), template.selectedWidget)
       $(".hidden").css("display", "inherit")
       $("#loadingPage").css("display", "none");
     },
@@ -77,20 +73,16 @@ async function main(){
 
   //todo get rid of this var?
   var methods:any = template;
-  new Vue({
+  var sideMenu = new Vue({
     el: '#sideMenu',
     data: template,
     methods: methods
   })
-
-  new Vue({
+  var widgetConfig = new Vue({
     el: '#widgetConfig',
     data: template,
     methods: methods
   })
-
-  // var menuView = r.bind($(), template)
-  // var menuView = r.bind($('#widgetConfig'), template)
 
   //create widgets from users widgets
   template.widgets = (await $.get("/api/user/getWidgets"))
