@@ -10,6 +10,10 @@ export default {
     while (matches = latestSeasonReg.exec(result)) {
       latestSeasonUrl = rootUrl+"/"+matches[1]
     }
+    if(latestSeasonUrl == ""){
+      res.send(output)
+      return
+    }
     result = await request(latestSeasonUrl);
 
   	var regex = new RegExp('<a href="(.*?)" title="(.*?)" style="text-decoration: none; color: black;">', "g")
