@@ -12,6 +12,7 @@ import "./models/models"
 
 import user from "./controllers/user";
 import comic from "./controllers/comic";
+import spotify from "./controllers/spotify";
 import tvShow from "./controllers/tvShow";
 import viewedItem from "./controllers/viewedItem";
 
@@ -54,6 +55,8 @@ async function main(){
 	app.get('/api/comic/xkcd/latest', watchAsyncError(comic.xkcd))
 	app.get('/api/comic/dilbert/latest', watchAsyncError(comic.dilbert))
 	app.get('/api/comic/cAndH/latest', watchAsyncError(comic.cAndH))
+
+	app.get('/api/spotify/latest', watchAsyncError(spotify.topChart))
 
 	app.get('/api/tv/:show', watchAsyncError(tvShow.tv))
 

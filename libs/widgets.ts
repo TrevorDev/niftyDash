@@ -1,6 +1,8 @@
 import $ = require("jquery")
 import hn from "./hn";hn;//dont know why i need to do this???
 import op from "../libs/objectPromise";op;
+import regexMatch from "../libs/regexMatch"
+
 //base
 class Widget {
   static defaultSettings = {}
@@ -86,6 +88,17 @@ var widgetList = {
       await this.updateNotification()
     }
   },
+  TOP_SPOTIFY: class TopSotifyWidget extends newsfeedWidget {
+    static type = "TOP_SPOTIFY"
+    static defaultSettings = JSON.stringify({})
+    getStories = async function(){
+      var widget = this;
+      this.stories = (await $.get("/api/spotify/latest"))
+        .map((i)=>new Story(widget.name+i.id,i.name, i.link, i.link))
+        .filter((i)=> !this.viewedItems[i.id])
+      await this.updateNotification()
+    }
+  },
   XKCD: class xkcdWidget extends newsfeedWidget {
     static type = "XKCD"
     static defaultSettings = JSON.stringify({})
@@ -122,7 +135,7 @@ var widgetList = {
   TV: class tvWidget extends newsfeedWidget {
     static type = "TV"
     static defaultSettings = JSON.stringify({
-      shows: ["silicon-valley-2014"]
+      shows: ["silicon-valley-watch-online"]
     })
     getStories = async function(){
       var widget = this;
