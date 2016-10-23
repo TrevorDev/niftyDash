@@ -44,7 +44,7 @@ class newsfeedWidget extends Widget {
       console.log(this.name)
       console.log(story.title)
       console.log(story.id)
-      $.post("/api/viewedItem/add", {item: story.id})
+      $.post("/api/viewedItem/add", {widgetId:this.id, item: story.id})
       this.stories = this.stories.filter((s)=>s.id != story.id)
 
       await this.updateNotification()

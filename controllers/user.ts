@@ -31,8 +31,9 @@ export default {
   },
   getViewedItems: async function(req, res){
     var u = await User.findById(req.session.userID)
-    //TODO replace limit with number of widgets * 100 or something more deterministic
-    var items = (await u.getViewedItems({order: [['createdAt', 'DESC']], limit: 2000})).map((i)=>i.item)
+    var widgets = await u.getWidgets()
+    var items = (await op(widgets.map((w)=>w.getViewedItems({order: [['createdAt', 'DESC']], limit: 200})))).reduce((prev, current)=>{return prev.concat(current)}, []).map((i)=>i.item)
+    console.log(items)
     res.send(items)
   },
   addWidget: async function(req, res){

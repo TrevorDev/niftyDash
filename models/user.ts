@@ -42,6 +42,5 @@ User.static = {
   }
 }
 
-User.hasMany(ViewedItem)
 User.hasMany(Widget)
 export default User

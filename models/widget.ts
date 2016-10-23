@@ -1,4 +1,5 @@
 import db from "../libs/database";
+import ViewedItem from "../models/viewedItem";
 import Sequelize = require("sequelize");
 // enum WidgetType {
 //     NEWSFEED
@@ -46,4 +47,6 @@ let Widget:IWidget = db.define<Sequelize.Instance<any>, any>("widget", {
 Widget.static = {
   TYPE: TYPE
 }
+
+//Widget.hasMany(ViewedItem)
 export default Widget
