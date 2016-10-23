@@ -6,6 +6,7 @@ import op from "../libs/objectPromise"
 interface userS extends Sequelize.Instance<any> {
   addWidget:any;
   getWidgets:any;
+  removeWidget:any;
   addViewedItem:any;
   getViewedItems:any;
   id:number;

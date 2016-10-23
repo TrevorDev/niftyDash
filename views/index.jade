@@ -51,6 +51,11 @@ html
                           i.fa.fa-save
                         span  save
                       span(id="saveMsg")
+                  form(v-on:submit="deleteWidget($event)" id="deleteForm")
+                    button.btn 
+                      span
+                        i.fa.fa-trash
+                      span  delete
               div.card
                 div.card-block
                   form(v-on:submit="addWidget($event)" id="addForm")

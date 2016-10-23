@@ -65,6 +65,14 @@ async function main(){
       //this should be put but jquery doesnt care enuf
       await $.post("/api/user/saveWidget", formData)
       $("#saveMsg").html("Done! Please refresh the page to see changes.")
+    },
+    deleteWidget: async (e)=>{
+      e.preventDefault()
+      var formData = {
+        id: template.selectedWidget.id
+      }
+      await $.post("/api/user/deleteWidget", formData)
+      $("#saveMsg").html("Done! Please refresh the page to see changes.")
     }
   }
 

@@ -49,6 +49,7 @@ async function main(){
 	app.post("/api/user/login", watchAsyncError(user.login))
 	app.post("/api/user/addWidget", watchAsyncError(user.addWidget))
 	app.post("/api/user/saveWidget", watchAsyncError(user.saveWidget))
+	app.post("/api/user/deleteWidget", watchAsyncError(user.deleteWidget))
 	app.post("/api/viewedItem/add", watchAsyncError(viewedItem.add))
 	app.get("/api/user/getViewedItems", watchAsyncError(user.getViewedItems))
 

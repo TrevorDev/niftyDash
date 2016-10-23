@@ -33,7 +33,6 @@ export default {
     var u = await User.findById(req.session.userID)
     var widgets = await u.getWidgets()
     var items = (await op(widgets.map((w)=>w.getViewedItems({order: [['createdAt', 'DESC']], limit: 200})))).reduce((prev, current)=>{return prev.concat(current)}, []).map((i)=>i.item)
-    console.log(items)
     res.send(items)
   },
   addWidget: async function(req, res){
@@ -60,5 +59,10 @@ export default {
     w[0].name = req.body.name
     await w[0].save()
     res.send()
+  },
+  deleteWidget: async function(req, res){
+    var u = await User.findById(req.session.userID)
+    var w = (await u.getWidgets({where:{id: req.body.id}}))[0]
+    await u.removeWidget(w)
   }
 }
