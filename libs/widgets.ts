@@ -70,7 +70,7 @@ var widgetList = {
       var res = await $.get("http://www.reddit.com/r/"+this.settings.subreddits+"/top.json?limit="+this.settings.limit)
       var widget = this;
       this.stories = res.data.children
-        .map((i)=>new Story(widget.name+i.data.id, i.data.title, i.data.url, "https://www.reddit.com"+i.data.permalink))
+        .map((i)=>new Story(widget.name+i.data.id, i.data.title+" ▲"+i.data.score, i.data.url, "https://www.reddit.com"+i.data.permalink))
         .filter((i)=> !this.viewedItems[i.id])
       await this.updateNotification()
     }
@@ -83,7 +83,7 @@ var widgetList = {
     getStories = async function(){
       var widget = this;
       this.stories = (await hn.getTopStories(this.settings.limit))
-        .map((i)=>new Story(widget.name+i.id,i.title, i.url, "https://news.ycombinator.com/item?id="+i.id))
+        .map((i)=>new Story(widget.name+i.id,i.title + " ▲"+i.score, i.url, "https://news.ycombinator.com/item?id="+i.id))
         .filter((i)=> !this.viewedItems[i.id])
       await this.updateNotification()
     }
