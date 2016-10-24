@@ -43,6 +43,9 @@ async function main(){
 	app.get('/',async function(req, res) {
 		res.render('index')
 	});
+	app.get('/classic',async function(req, res) {
+		res.render('classic')
+	});
 
 	app.get("/api/user/getWidgets", watchAsyncError(user.getWidgets))
 	app.post("/api/user/create", watchAsyncError(user.create))

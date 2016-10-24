@@ -24,7 +24,7 @@ async function main(){
   var template = {
     widgets: [],
     selectedWidget: null,
-    accountUrl: "/?account="+params.account,
+    accountUrl: "?account="+params.account,
     displayConfig:false,
     widgetMenuClicked: (widget)=>{
       template.selectedWidget = widget
@@ -77,7 +77,7 @@ async function main(){
   }
 
   //binding sidemenu
-  window.history.replaceState(null, null, template.accountUrl);
+  window.history.replaceState(null, null, window.location.pathname+template.accountUrl);
 
   //todo get rid of this var?
   var methods:any = template;
