@@ -7,6 +7,7 @@ import regexMatch from "../libs/regexMatch"
 class Widget {
   static defaultSettings = {}
   static type = "Widget"
+  static friendlyName = "Widget"
   name = "";
   id:number;
   notification = "<i class='fa fa-refresh fa-spin'></i>"
@@ -62,8 +63,9 @@ class Story{
 var widgetList = {
   REDDIT: class redditWidget extends newsfeedWidget {
     static type = "REDDIT"
+    static friendlyName = "Reddit"
     static defaultSettings = JSON.stringify({
-      subreddits: "TODAYILEARNED+WORLDNEWS+ASKREDDIT+TECHNOLOGY+BESTOF+IAMA+SMASHBROS+MUSIC+HIPHOPHEADS+COMICS+PROGRAMMERHUMOR+FUTUROLOGY+PROGRAMMING+PERSONALFINANCE+GAMEDEV+ENTREPRENEUR+INVESTING+MASHUPS+FINANCIALINDEPENDENCE+RETIREDGIF+LIGHTBULB+STARTUPS+ZENHABITS+SMALLBUSINESS+NODE+CODING+INDIEGAMES+DATASETS+SOMEBODYMAKETHIS+ENTREPRENEURRIDEALONG+SIDEPROJECT+RUNITUP+ENTREPENEUR+CODEPROJECTS+SMALLBUISNESS+NODEJS+KOAJS+NOBADCONTENT+COMBOHYPE",
+      subreddits: "AskReddit+AskScience+todayilearned+lifeprotips+lifehacks+futurology+iama+technology+gaming+gifs+news+space+worldnews",
       limit: 100
     })
     getStories = async function(){
@@ -77,6 +79,7 @@ var widgetList = {
   },
   HN: class hackerNewsWidget extends newsfeedWidget {
     static type = "HN"
+    static friendlyName = "Hacker News"
     static defaultSettings = JSON.stringify({
       limit: 100
     })
@@ -90,6 +93,7 @@ var widgetList = {
   },
   TOP_SPOTIFY: class TopSotifyWidget extends newsfeedWidget {
     static type = "TOP_SPOTIFY"
+    static friendlyName = "Music"
     static defaultSettings = JSON.stringify({})
     getStories = async function(){
       var widget = this;
@@ -101,6 +105,7 @@ var widgetList = {
   },
   XKCD: class xkcdWidget extends newsfeedWidget {
     static type = "XKCD"
+    static friendlyName = "XKCD"
     static defaultSettings = JSON.stringify({})
     getStories = async function(){
       var widget = this;
@@ -112,6 +117,7 @@ var widgetList = {
   },
   CANDH: class cAndHWidget extends newsfeedWidget {
     static type = "CANDH"
+    static friendlyName = "C and H"
     static defaultSettings = JSON.stringify({})
     getStories = async function(){
       var widget = this;
@@ -123,6 +129,7 @@ var widgetList = {
   },
   DILBERT: class dilbertWidget extends newsfeedWidget {
     static type = "DILBERT"
+    static friendlyName = "Dilbert"
     static defaultSettings = JSON.stringify({})
     getStories = async function(){
       var widget = this;
@@ -134,6 +141,7 @@ var widgetList = {
   },
   TV: class tvWidget extends newsfeedWidget {
     static type = "TV"
+    static friendlyName = "TV"
     static defaultSettings = JSON.stringify({
       shows: ["silicon-valley-watch-online"]
     })

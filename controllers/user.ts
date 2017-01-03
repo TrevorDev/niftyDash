@@ -20,8 +20,8 @@ export default {
   },
   create: async function(req, res){
     var u = await User.create({account: guid()})
-    var widgets = await User.static.createDefaultWidgets()
-    await op(widgets.map((w)=>u.addWidget(w)))
+    // var widgets = await User.static.createDefaultWidgets()
+    // await op(widgets.map((w)=>u.addWidget(w)))
     res.send(u)
   },
   login: async function(req, res){
@@ -64,5 +64,6 @@ export default {
     var u = await User.findById(req.session.userID)
     var w = (await u.getWidgets({where:{id: req.body.id}}))[0]
     await u.removeWidget(w)
+    res.send()
   }
 }

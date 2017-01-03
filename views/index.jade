@@ -5,8 +5,11 @@ html
     link(rel="icon" href="/public/img/favicon.ico" type="image/x-icon")
     link(rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css")
     link(rel="stylesheet" href="/bower_components/font-awesome/css/font-awesome.min.css")
+    link(rel="stylesheet" href="/bower_components/awesomplete/awesomplete.css")
+    
     //- link(rel="stylesheet" href="/public/css/main.css")
     //- script(src='/bower_components/bootstrap/dist/js/bootstrap.min.js')
+    
     style.
       body {
         font-family: Helvetica Neue,Helvetica,sans-serif;
@@ -16,11 +19,11 @@ html
         
         width: 100%;
         position: relative;
-        max-width: 1060px;
+        //- max-width: 1060px;
         margin-left:auto;margin-right:auto;
       }
       .menu-btn, .menu-btn:hover {
-        color: #373a3c;
+        //color: #373a3c;
         padding: 20px
       }
       .display-img {
@@ -29,80 +32,112 @@ html
       .list-card {
         padding: 10px;
       }
+    
+      .awesomplete {
+        width: 100%;
+      }
       
-      /* Shine */
-      .hover14 {
-      	position: relative;
+      .activeNum {
+        color: #98C363 !important;
       }
-      .hover14::before {
-      	position: absolute;
-      	top: 0;
-      	left: -75%;
-      	z-index: 0;
-      	display: block;
-      	content: '';
-      	width: 50%;
-      	height: 100%;
-      	background: -webkit-linear-gradient(left, rgba(255,255,255,0) 0%, rgba(255,255,255,.3) 100%);
-      	background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,.3) 100%);
-      	-webkit-transform: skewX(-25deg);
-      	transform: skewX(-25deg);
+      
+      .activeText {
+        color: #E05A4A;
       }
-      .hover14:hover::before {
-      	-webkit-animation: shine .75s;
-      	animation: shine .75s;
-      }
-      @-webkit-keyframes shine {
-      	100% {
-      		left: 125%;
-      	}
-      }
-      @keyframes shine {
-      	100% {
-      		left: 125%;
-      	}
-      }
+    
+    link(rel="stylesheet" href="/public/css/main.css")
   body
+    #app
       #top-menu
         #title(style="text-align:center;")
-          h1(style="font-weight: bold;") NIFTYKICK 🔥 💯 	😂
-          p#quote
+          h1(style="font-weight: bold;") NIFTYKICK 🔥 💯 😂
+          p.hidden {{topMsg}}
         #menu(style="text-align:center;")
-          a.menu-btn(href="#home") Featured
-          a.menu-btn(href="/classic") All News
-          a.menu-btn(href="#recommend") Stuff I Recommend
-          a.menu-btn(href="#discussion") Discussion
-      #content.container-fluid(style="padding-top:20px;")
-        div.row.list-card
-          div.hover14.col-sm-4
-            img.display-img(src="/public/img/launch.png")
-          div.col-sm-8
-            h4 NIFTYKICK launch 🔥🔥🔥
-            p We did it, after 4 years of working hard at a software engineering degree I figured out how to make a website.
-        div.row.list-card
-          div.hover14.col-sm-4
-            img.display-img(src="/public/img/keyboard.png")
-          div.col-sm-8
-            h4 Under 40$: Best mechanical keyboard
-            p The Redragon K552 has exactly what is needed out of a mechanical keyboard
+          a.menu-btn(href="#news") News
+          a.menu-btn(href="#stuff") Nifty Stuff
+          //- a.menu-btn(href="#chat") Discussion
+      #content.container-fluid(style="padding-right:0px;padding-left:0px;overflow:hidden")
+        #news.row.hidden
+          #sideMenu.col-xl-2
+            ul.list-group
+              div
+                li.btn.list-group-item(v-for="widget in widgets" v-on:click="widgetMenuClicked(widget)" style="text-align: inherit;")
+                  span(v-bind:class="{ activeText: selectedWidget == widget }") {{widget.name}}
+                  span(class="label label-default label-pill pull-right" v-bind:class="{ activeNum: selectedWidget == widget }" v-html="widget.notification")
+                li.btn.list-group-item(id="config" v-on:click="configClicked()" style="text-align: inherit;")
+                  span
+                    i.fa.fa-gears
+                  span(v-if="displayConfig")  Hide Settings
+                  span(v-else)  Settings
+                div
+                  span
+                    a(v-bind:href="accountUrl")  Link
+                  span  to your account for other browsers
+                <br><br><br>
+                div(style="width:100%;text-align: center;font-size: 0.7em;") Ver 0.2.1 - Please add any feedback 
+                  a(href="https://docs.google.com/document/d/1RsXUN85k7vbmU2VrBhYbr17s5elcvTPhGAEqNViqt8c/edit?usp=sharing") here.
+          div.col-xl-10
+          
+          
+          
+            #settings.hidden(style="margin-left:20px;" v-if="displayConfig")
+              form(v-on:submit.prevent="submitSettings")
+                h2 Select your feeds
+                div
+                  label.form-check-inline(style="display: table;width:100%")
+                    input.form-check-input(type="checkbox" value="REDDIT" v-model="checkedWidgets")
+                    p Reddit 
+                    p Subreddits:
+                    input(id="autocomp" style="width: 100%; display: table-cell;" data-list="skReddit, funny, todayilearned, pics, science, worldnews, IAmA, announcements, videos, gaming, movies, Music, aww, news, gifs, explainlikeimfive, askscience, EarthPorn, books, television, LifeProTips, mildlyinteresting, DIY, Showerthoughts, space, sports, tifu, Jokes, InternetIsBeautiful, food, gadgets, history, photoshopbattles, nottheonion, dataisbeautiful, Futurology, Documentaries, GetMotivated, personalfinance, listentothis, philosophy, UpliftingNews, OldSchoolCool, Art, creepy, nosleep, WritingPrompts, TwoXChromosomes, Fitness, technology, bestof, WTF, AdviceAnimals, politics, atheism, woahdude, europe, leagueoflegends, trees, pokemongo, gameofthrones, interestingasfuck, 4chan, Games, BlackPeopleTwitter, programming, Android, sex, cringepics, pcmasterrace, reactiongifs, malefashionadvice, Overwatch, pokemon, Frugal, YouShouldKnow, fffffffuuuuuuuuuuuu, Unexpected, relationships, HistoryPorn, AskHistorians, oddlysatisfying, lifehacks, nfl, soccer, StarWars, tattoos, comics, OutOfTheLoop, JusticePorn, Minecraft, FoodPorn, facepalm, cringe, nba, hiphopheads, me_irl, olympics, wheredidthesodago, GlobalOffensive, anime, buildapc, wallpapers, GameDeals, hearthstone, freebies, conspiracy, gentlemanboners, Cooking, TrueReddit, cats, shittyaskscience, talesfromtechsupport, apple, loseit, EatCheapAndHealthy, skyrim, NetflixBestOf, asoiaf, RoomPorn, wow, humor, Fallout, spaceporn, baconreader" data-multiple)
+                div
+                  label.form-check-inline
+                    input.form-check-input(type="checkbox" value="HN" v-model="checkedWidgets")
+                    p Hacker News  
+                div
+                  label.form-check-inline
+                    input.form-check-input(type="checkbox" value="XKCD" v-model="checkedWidgets")
+                    p XKCD 
+                div
+                  label.form-check-inline
+                    input.form-check-input(type="checkbox" value="DILBERT" v-model="checkedWidgets")
+                    p Dilbert  
+                div
+                  label.form-check-inline
+                    input.form-check-input(type="checkbox" value="CANDH" v-model="checkedWidgets")
+                    p Cyanide and Happiness 
+                div
+                  label.form-check-inline
+                    input.form-check-input(type="checkbox" value="TOP_SPOTIFY" v-model="checkedWidgets")
+                    p New Music 
+                button.btn Save
+                
+                
+            div(v-if="selectedWidget")
+              div.card(v-for="story in selectedWidget.stories")
+                div.card-block
+                  button.btn.btn-secondary(style="margin-right:3px;" v-on:click="storyClicked(story)")
+                    i.fa.fa-close
+                  a(target="_blank" v-bind:href="story.commentsUrl")
+                    button.btn.btn-secondary( v-on:click="storyClicked(story)" style="margin-right:3px;")
+                      i.fa.fa-comments
+                  span.card-text 
+                    a(target="_blank" v-bind:href="story.url" v-on:click="storyClicked(story)") {{story.title}}
+      //- #content.container-fluid(style="padding-top:20px;")
+      //-   div.row.list-card
+      //-     div.hover14.col-sm-4
+      //-       img.display-img(src="/public/img/launch.png")
+      //-     div.col-sm-8
+      //-       h4 NIFTYKICK launch 🔥🔥🔥
+      //-       p We did it, after 4 years of working hard at a software engineering degree I figured out how to make a website.
+      //-   div.row.list-card
+      //-     div.hover14.col-sm-4
+      //-       img.display-img(src="/public/img/keyboard.png")
+      //-     div.col-sm-8
+      //-       h4 Under 40$: Best mechanical keyboard
+      //-       p The Redragon K552 has exactly what is needed out of a mechanical keyboard
   script(src="https://code.jquery.com/jquery-3.1.1.min.js")
-  script.
-        var comments = [
-          'Listen to the kids bro', 
-          'I can’t let these people play me Name one genius that ain\'t crazy',
-          'I miss the old Kanye',
-          'Turn the 6',
-          'I turn the six upside down, it\'s a nine now',
-          'My thesis will smash a stereo to pieces',
-          'Went to Burger King, they spit in my onion rings',
-          'I\'m not a \'Business-Man\'! I\'m a Business... man! Let me handle my business, damn!',
-          'Why you gotta fight with me at cheesecake',
-          'Chop the top off the Porsche, that\'s a headless horse',
-          'I\'m not out of control, I\'m just not in they control'
-        ]
-        console.log($("#quote"))
-        $("#quote").html('"'+comments[Math.floor(Math.random()*comments.length)]+'"')
-        
+  script(src="/browserify/pivot/logic.js")
+  script.        
         //analytics
         ;(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

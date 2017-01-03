@@ -21,7 +21,7 @@ html
             div.hidden
               li.btn.list-group-item(v-for="widget in widgets" v-on:click="widgetMenuClicked(widget)" style="text-align: inherit;")
                 span {{widget.name}}
-                span(class="label label-default label-pill pull-right") {{{widget.notification}}}
+                span(class="label label-default label-pill pull-right" v-html="widget.notification")
               li.btn.list-group-item(id="config" v-on:click="configClicked()" style="text-align: inherit;")
                 span
                   i.fa.fa-gears
