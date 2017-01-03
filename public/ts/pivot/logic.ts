@@ -12,12 +12,20 @@ async function main(){
   //AUTH
   //TODO store account in localstorage
   var newUser = false
+  var localstorageParam = localStorage.getItem("account");
   if(!params.account){
-    var data = await $.post("/api/user/create")
-    params.account = data.account
-    newUser = true
+    if(localstorageParam){
+      //TODO clean up this localstorage logic
+      params.account = localstorageParam
+    }else{
+      var data = await $.post("/api/user/create")
+      params.account = data.account
+      newUser = true
+    }
   }
   var user = await $.post("/api/user/login", {account: params.account})
+  localStorage.setItem("account", params.account);
+
   if(newUser){
     //ADD DEFAULT WIDGETS
     var adds = ["REDDIT", "HN", "XKCD", "DILBERT", "CANDH", "TOP_SPOTIFY"].map((a)=>{
@@ -149,6 +157,10 @@ async function main(){
 
         console.log("done!")
         location.reload();
+      },
+      createNewAccount: ()=>{
+        localStorage.clear();
+        window.location.href = "/";
       }
     }
   })
