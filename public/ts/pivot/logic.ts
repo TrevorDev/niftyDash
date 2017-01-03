@@ -4,34 +4,12 @@ import widgets from "../../../libs/widgets";
 import objectPromise from "../../../libs/objectPromise";
 var Awesomplete = require('awesomplete')
 
-
-
-// var Bloodhound = require('bloodhound-js');
-//
-// var glob:any = global
-// glob.Tether = require('tether');
-// glob.$ = require('jquery');
-// glob.jQuery = require('jquery');
-// require('jquery-ui');
-// require('bootstrap');
-// require('typeahead')
-// require('bootstrap-tokenfield');
-// console.log($().jquery);
-
 async function main(){
-  // console.log(  $('#tokenfield-typeahead').autocomplete)
-  //   console.log(  $('#tokenfield-typeahead'))
-
-
-
-
-
   //get url params
   var ar:Array<string> = (window.location.search.match(/[\?&](.*?)=([^&#]*)/g) || []);
   var params:any = ar.reduce((prev, cur)=>{prev[cur.split("=")[0].slice(1)]=cur.split("=")[1];return prev},{})
 
-
-  //auth
+  //AUTH
   //TODO store account in localstorage
   var newUser = false
   if(!params.account){
@@ -40,10 +18,9 @@ async function main(){
     newUser = true
   }
   var user = await $.post("/api/user/login", {account: params.account})
-
   if(newUser){
     //ADD DEFAULT WIDGETS
-    var adds = ["HN", "REDDIT", "CANDH", "TOP_SPOTIFY", "XKCD", "DILBERT"].map((a)=>{
+    var adds = ["REDDIT", "HN", "XKCD", "DILBERT", "CANDH", "TOP_SPOTIFY"].map((a)=>{
       var formData = {
         type: a,
         name: widgets.widgetList[a].friendlyName
@@ -52,13 +29,10 @@ async function main(){
     })
     await objectPromise(adds)
   }
-
   var accountUrl = "?account="+params.account
   window.history.replaceState(null, null, window.location.pathname+accountUrl);
 
-
-
-  //quote
+  //QUOTE
   var comments = [
     'Listen to the kids bro',
     'I can’t let these people play me Name one genius that ain\'t crazy',
@@ -73,7 +47,7 @@ async function main(){
   ]
   var topMsg = '"'+comments[Math.floor(Math.random()*comments.length)]+'"'
 
-  //get widgets
+  //get users widgets
   var viewedItems = (await $.get("/api/user/getViewedItems")).reduce((prev, cur)=>{prev[cur]=true;return prev},{})
   var usersWidgets = (await $.get("/api/user/getWidgets"))
     .map((w) => ({widget: w, class: widgets.widgetList[w.type]}))
@@ -83,7 +57,6 @@ async function main(){
   //show hidden things while vue is loading
   $(".hidden").css("visibility", "inherit")
   $("#loadingPage").css("display", "none");
-
 
   //initialize template
   var template = {
@@ -108,6 +81,7 @@ async function main(){
           var redditWidget = template.widgets.filter((w)=> w.constructor.type == "REDDIT")[0]
           if(redditWidget){
             $('#autocomp').val(redditWidget.settings.subreddits.split("+").join(", "))
+            //TODO go to the end of the input box
             // $('#autocomp').focus(function(){
             //   setTimeout(async ()=>{this.selectionStart = this.selectionEnd = 10000;}, 0)
             // })
@@ -176,39 +150,6 @@ async function main(){
         console.log("done!")
         location.reload();
       }
-      // addWidget: async (e)=>{
-      //   e.preventDefault();
-      //   $("#addMsg").html("please wait...")
-      //   console.log("one")
-      //   console.log($("#addMsg").html())
-      //   var formData = $("#addForm").serializeArray().reduce(function(obj, item) {
-      //       obj[item.name] = item.value;
-      //       return obj;
-      //   }, {})
-      //   await $.post("/api/user/addWidget", formData)
-      //   $("#addMsg").html("Done! Please refresh the page to see changes.")
-      // },
-      // saveWidget: async (e)=>{
-      //   e.preventDefault();
-      //   $("#saveMsg").html("please wait...")
-      //   var formData:any = $("#saveForm").serializeArray().reduce(function(obj, item) {
-      //       obj[item.name] = item.value;
-      //       return obj;
-      //   }, {})
-      //   formData.id = template.selectedWidget.id;
-      //   console.log(formData)
-      //   //this should be put but jquery doesnt care enuf
-      //   await $.post("/api/user/saveWidget", formData)
-      //   $("#saveMsg").html("Done! Please refresh the page to see changes.")
-      // },
-      // deleteWidget: async (e)=>{
-      //   e.preventDefault()
-      //   var formData = {
-      //     id: this.selectedWidget.id
-      //   }
-      //   await $.post("/api/user/deleteWidget", formData)
-      //   $("#saveMsg").html("Done! Please refresh the page to see changes.")
-      // }
     }
   })
 

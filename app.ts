@@ -43,6 +43,9 @@ async function main(){
 	app.get('/',async function(req, res) {
 		res.render('index')
 	});
+	app.get('/niftyStuff',async function(req, res) {
+		res.render('niftyNews')
+	});
 	app.get('/classic',async function(req, res) {
 		res.render('classic')
 	});
@@ -67,7 +70,7 @@ async function main(){
 	app.get('/browserify/*', function(req, res) {
 		//TODO: cache this in production or generate all files beforehand
 		let reqFile:string = req.params[0]
-		if(config.env == "DEV"){
+		if(process.env.NODE_ENV != "production"){
 			let stream = browserify(["./public/ts/"+reqFile]).bundle()
 			stream.on("data", function(buffer){
 				res.write(buffer)
@@ -82,6 +85,10 @@ async function main(){
 
 	app.listen(3000, function(){
 	    console.log("Server running");
+			if(process.argv[2] == "p"){
+				process.env.NODE_ENV = 'production'
+			}
+			console.log("Env: "+process.env.NODE_ENV)
 	});
 }
 try{

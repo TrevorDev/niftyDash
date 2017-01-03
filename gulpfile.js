@@ -15,6 +15,7 @@ gulp.task('default', function () {
     }else{
       console.log("done.")
       compileBabel(function(){
+        //TODO this might not catch all files
         glob("public/ts/**/*.js", function (er, files) {
           console.log(files)
           files.forEach(function(file){
