@@ -1,4 +1,4 @@
-import $ = require("jquery")
+//import $ = require("jquery")
 import hn from "./hn";hn;//dont know why i need to do this???
 import op from "../libs/objectPromise";op;
 import regexMatch from "../libs/regexMatch"
@@ -67,9 +67,12 @@ var widgetList = {
     static defaultSettings = JSON.stringify({
       subreddits: "AskReddit+AskScience+todayilearned+lifeprotips+lifehacks+futurology+iama+technology+gaming+gifs+news+space+worldnews",
       limit: 100
-    })
+    });
     getStories = async function(){
-      var res = await $.get("http://www.reddit.com/r/"+this.settings.subreddits+"/top.json?limit="+this.settings.limit)
+
+
+
+      var res = await $.ajax({url: "http://www.reddit.com/r/"+this.settings.subreddits+"/top.json?limit="+this.settings.limit,dataType: 'json'});
       var widget = this;
       this.stories = res.data.children
         .map((i)=>new Story(widget.name+i.data.id, i.data.title+" ▲"+i.data.score, i.data.url, "https://www.reddit.com"+i.data.permalink))

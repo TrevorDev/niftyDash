@@ -1,4 +1,4 @@
-//require("babel/polyfill")
+require("babel-polyfill");
 
 import appFactory from "./libs/appFactory";
 import preloadDB from "./libs/preLoadDB";

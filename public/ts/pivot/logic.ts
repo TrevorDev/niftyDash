@@ -1,4 +1,5 @@
 //import $ = require("jquery")
+require("babel-polyfill");
 import Vue = require("vue");
 import widgets from "../../../libs/widgets";
 import objectPromise from "../../../libs/objectPromise";
@@ -19,7 +20,7 @@ async function main(){
   if(!params.account){
     if(localstorageParam){
       //TODO clean up this localstorage logic
-      params.account = localstorageParam
+      params.account = localstorageParam;
     }else{
       var data = await $.post("/api/user/create")
       params.account = data.account

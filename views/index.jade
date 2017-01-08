@@ -1,15 +1,15 @@
 extends ./header.jade
 block content
   #loadingPage
-    h1
-      i(class='fa fa-refresh fa-spin' style="width:100%;text-align: center;")
+    h1(style="width:100%;text-align: center;")
+      i(class='fa fa-refresh fa-spin')
   #content.container-fluid(style="padding-right:30px;padding-left:30px;overflow:hidden")
     .row.row-offcanvas.row-offcanvas-left
       #sidebar.col-6.col-md-3.col-xl-2.sidebar-offcanvas.hidden
         //- SIDEMENU WIDGETS
         ul.list-group
           div
-            li.btn.list-group-item(v-for="widget in widgets"  v-on:click="widgetMenuClicked(widget)" style="text-align: inherit;")
+            li.btn.list-group-item(v-for="widget in widgets"  v-on:click="widgetMenuClicked(widget)" style="text-align: inherit;white-space: normal;")
               span(v-bind:class="{ activeText: selectedWidget == widget }") {{widget.name}}
               span(class="label label-default label-pill pull-right" v-bind:class="{ activeNum: selectedWidget == widget }" v-html="widget.notification")
             li.btn.list-group-item(id="config" v-on:click="configClicked()" style="text-align: inherit;")

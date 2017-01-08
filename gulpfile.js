@@ -38,7 +38,7 @@ gulp.task('default', function () {
 var compileBabel = function(cb){
   var excludedFolders = ["bower_components","node_modules","typings"]
   var filesToAdd = []
-  var babelFolders = fs.readdirSync("./public/")
+  var babelFolders = fs.readdirSync("./public/").map((s)=>"public/"+s).concat(["libs"])
   .filter(function(dir){
     return dir.indexOf(".") == -1
   }).filter(function(dir){
@@ -52,12 +52,14 @@ var compileBabel = function(cb){
 
   babelFolders.forEach(function(dir){
     console.log("compiling "+dir)
-    var compileString = dir.indexOf(".") == -1 ? "babel "+dir+" --out-dir "+dir : "babel "+dir+" --out-file "+dir
+    var compileString = dir.indexOf(".") == -1 ? "babel --presets es2015 "+dir+" --out-dir "+dir : "babel --presets es2015 "+dir+" --out-file "+dir
+    console.log(compileString)
     exec(compileString, function(error, stdout, stderr) {
       if(stderr){
         console.log(stderr)
-        console.log("please install babel. npm install babel -g")
+        console.log("please install babel. npm install babel-cli -g")
       }else{
+        console.log(stdout)
         console.log(dir+" done.")
       }
       runningCount--;

@@ -5,8 +5,8 @@ async function e(obj){
   }else if(obj.constructor === Array){
     return await Promise.all(obj)
   }else if(typeof obj === "object"){
-    let ret = {}
-    for(let key in obj){
+    var ret = {}
+    for(var key in obj){
       ret[key] = await e(obj[key])
     }
     return ret
