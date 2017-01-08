@@ -39,6 +39,7 @@
     "request": "^2.75.0",
     "request-promise": "^4.1.1",
     "sequelize": "^3.28.0",
+    "slideout": "^1.0.1",
     "vue": "^2.1.8",
     "vue-router": "^2.1.1"
   },

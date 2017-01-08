@@ -4,6 +4,9 @@ import widgets from "../../../libs/widgets";
 import objectPromise from "../../../libs/objectPromise";
 var Awesomplete = require('awesomplete')
 
+
+
+
 async function main(){
   //get url params
   var ar:Array<string> = (window.location.search.match(/[\?&](.*?)=([^&#]*)/g) || []);
@@ -164,6 +167,15 @@ async function main(){
       }
     }
   })
+
+  $('[data-toggle="offcanvas"]').click(function () {
+    $('.row-offcanvas').toggleClass('active')
+  });
+
+  $("#content").on("swipe",function(){
+    $('.row-offcanvas').toggleClass('active')
+    //$(this).hide();
+  });
 
   //load widgets
   await objectPromise(usersWidgets.map((w)=>w.init()))

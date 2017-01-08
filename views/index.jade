@@ -3,13 +3,13 @@ block content
   #loadingPage
     h1
       i(class='fa fa-refresh fa-spin' style="width:100%;text-align: center;")
-  #content.container-fluid(style="padding-right:0px;padding-left:0px;overflow:hidden")
-    #news.row.hidden
-      //- SIDEMENU WIDGETS
-      #sideMenu.col-xl-2
+  #content.container-fluid(style="padding-right:30px;padding-left:30px;overflow:hidden")
+    .row.row-offcanvas.row-offcanvas-left
+      #sidebar.col-6.col-md-3.col-xl-2.sidebar-offcanvas.hidden
+        //- SIDEMENU WIDGETS
         ul.list-group
           div
-            li.btn.list-group-item(v-for="widget in widgets" v-on:click="widgetMenuClicked(widget)" style="text-align: inherit;")
+            li.btn.list-group-item(v-for="widget in widgets"  v-on:click="widgetMenuClicked(widget)" style="text-align: inherit;")
               span(v-bind:class="{ activeText: selectedWidget == widget }") {{widget.name}}
               span(class="label label-default label-pill pull-right" v-bind:class="{ activeNum: selectedWidget == widget }" v-html="widget.notification")
             li.btn.list-group-item(id="config" v-on:click="configClicked()" style="text-align: inherit;")
@@ -26,7 +26,9 @@ block content
               <br><br>
             div(style="width:100%;text-align: center;font-size: 0.7em;") Ver 0.2.1 - Please add any feedback 
               a(href="https://docs.google.com/document/d/1RsXUN85k7vbmU2VrBhYbr17s5elcvTPhGAEqNViqt8c/edit?usp=sharing") here.
-      div.col-xl-10  
+      .col-12.col-md-9.col-xl-10.hidden
+        p.float-left.hidden-md-up
+          button.btn.btn-primary.btn-sm(type='button', data-toggle='offcanvas') Toggle Menu
         //- SETTINGS MENU
         #settings.hidden(style="margin-left:20px;" v-if="displayConfig")
           form(v-on:submit.prevent="submitSettings")
@@ -57,7 +59,7 @@ block content
               label.form-check-inline
                 input.form-check-input(type="checkbox" value="TOP_SPOTIFY" v-model="checkedWidgets")
                 p New Music 
-            button.btn Save      
+            button.btn Save     
         //- FEED
         div(v-if="selectedWidget")
           div.card(v-for="story in selectedWidget.stories")

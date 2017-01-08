@@ -1,8 +1,3 @@
-.hidden {
-  visibility: hidden;
-}
-
-
 /*DARK THEME*/
 body {
   background: #262831;
@@ -17,6 +12,12 @@ body {
 
 a {
   color: #7BB9FD;
+}
+
+a:focus, a:hover {
+  font-weight: inherit;
+  color: #7BB9FD;
+  text-decoration: inherit;
 }
 
 /*THESE ARE THE SAME*/
