@@ -92,15 +92,22 @@ var main = async ()=>{
       var collision = player.collider.clone().intersect(block.collider)
       if(!collision.isEmpty()){
         var overlap = collision.max.clone().sub(collision.min)
+        var axis = "x"
         if(overlap.x <= overlap.y && overlap.x <= overlap.z){
-          player.body.position.x += (collision.max.x == player.collider.max.x ? -overlap.x  : overlap.x)
+          axis = "x"
         }else if(overlap.y <= overlap.x && overlap.y <= overlap.z){
-          player.body.position.y += (collision.max.y == player.collider.max.y ? -overlap.y  : overlap.y)
+          axis = "y"
           player.spd.y=0;
         }else if(overlap.z <= overlap.y && overlap.z <= overlap.x){
-          player.body.position.z += (collision.max.z == player.collider.max.z ? -overlap.z  : overlap.z)
+          axis = "z"
         }
-
+        var posDirAdj = collision.max[axis] != player.collider.max[axis]
+        player.body.position[axis] += (posDirAdj ? overlap[axis] : -overlap[axis])
+        if(player.spd[axis] <= 0 && posDirAdj){
+          player.spd[axis]=0;
+        }else if(player.spd[axis] > 0 && !posDirAdj){
+          player.spd[axis]=0;
+        }
       }
     })
 
