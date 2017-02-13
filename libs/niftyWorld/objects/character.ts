@@ -5,9 +5,12 @@ import Controller from "../objects/controller"
 class Character {
   body:THREE.Mesh
   spd:THREE.Vector3
+  walkDir:THREE.Vector3
   view:THREE.Vector3 = new THREE.Vector3(0,0,0)
   collider:THREE.Box3 = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
   moveAcc = 0.01;
+  maxJumps = 1;
+  jumps = 1;
   constructor(public controller:Controller){
     this.body = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), materials.DEFAULT);
     this.spd = new THREE.Vector3(0,0,0)
@@ -51,37 +54,45 @@ class Character {
     this.spd.y -= 0.01
 
     //key input
-    var walkDir = new THREE.Vector3()
+    this.walkDir = new THREE.Vector3()
     if(this.controller.isDown("up")){
-      walkDir.x -= Math.sin(this.view.y) * this.moveAcc
-      walkDir.z -= Math.cos(this.view.y) * this.moveAcc
+      this.walkDir.x -= Math.sin(this.view.y) * this.moveAcc
+      this.walkDir.z -= Math.cos(this.view.y) * this.moveAcc
     }
     if(this.controller.isDown("down")){
-      walkDir.x += Math.sin(this.view.y) * this.moveAcc
-      walkDir.z += Math.cos(this.view.y) * this.moveAcc
+      this.walkDir.x += Math.sin(this.view.y) * this.moveAcc
+      this.walkDir.z += Math.cos(this.view.y) * this.moveAcc
     }
     if(this.controller.isDown("right")){
-      walkDir.z -= Math.sin(this.view.y) * this.moveAcc
-      walkDir.x += Math.cos(this.view.y) * this.moveAcc
+      this.walkDir.z -= Math.sin(this.view.y) * this.moveAcc
+      this.walkDir.x += Math.cos(this.view.y) * this.moveAcc
     }
     if(this.controller.isDown("left")){
-      walkDir.z += Math.sin(this.view.y) * this.moveAcc
-      walkDir.x -= Math.cos(this.view.y) * this.moveAcc
+      this.walkDir.z += Math.sin(this.view.y) * this.moveAcc
+      this.walkDir.x -= Math.cos(this.view.y) * this.moveAcc
     }
-    if(this.controller.isDown("jump")){
+    if(this.controller.isDown("jump") && this.jumps > 0){
       this.spd.y = 0.3
+      this.jumps--
+    }
+
+    if(this.jumps != this.maxJumps){
+      this.walkDir.multiplyScalar(0.2);
     }
 
     //colliison with objects
-    this.spd.add(walkDir)
+    this.spd.add(this.walkDir)
 
 
     this.body.position.add(this.spd)
     this.body.rotation.y = this.view.y
-    if(this.body.position.y < -1000){
+    if(this.body.position.y < -100){
       this.body.position.copy(new THREE.Vector3(0,0,0))
       this.spd.copy(new THREE.Vector3(0,0,0))
     }
+    this.updateCollision()
+  }
+  updateCollision(){
     this.collider.setFromObject(this.body)
   }
 }

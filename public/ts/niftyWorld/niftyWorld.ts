@@ -67,7 +67,12 @@ var main = async ()=>{
 	var player = new Character(controller);
   stage.scene.add(player.body)
 
-  var resp = await $.get("/public/levels/1.json")
+  function getParameterByName(name) {
+    var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+    return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+  }
+  var level = getParameterByName('level') || '0'
+  var resp = await $.get("/public/levels/"+level+".json")
   console.log(resp)
 
   //walls
@@ -88,29 +93,53 @@ var main = async ()=>{
   //main loop
   stage.startRender((delta, time)=>{
     player.update()
+
+    var collisions = []
     blocks.forEach((block, i)=>{
       var collision = player.collider.clone().intersect(block.collider)
       if(!collision.isEmpty()){
+        //collisions.push(collision)
         var overlap = collision.max.clone().sub(collision.min)
-        var axis = "x"
-        if(overlap.x <= overlap.y && overlap.x <= overlap.z){
+        var axis = ""
+        if(overlap.x != 0 && overlap.x <= overlap.y && overlap.x <= overlap.z){
           axis = "x"
-        }else if(overlap.y <= overlap.x && overlap.y <= overlap.z){
+        }else if(overlap.y != 0 && overlap.y <= overlap.x && overlap.y <= overlap.z){
           axis = "y"
-          player.spd.y=0;
-        }else if(overlap.z <= overlap.y && overlap.z <= overlap.x){
+        }else if(overlap.z != 0 && overlap.z <= overlap.y && overlap.z <= overlap.x){
           axis = "z"
         }
-        var posDirAdj = collision.max[axis] != player.collider.max[axis]
-        player.body.position[axis] += (posDirAdj ? overlap[axis] : -overlap[axis])
-        if(player.spd[axis] <= 0 && posDirAdj){
-          player.spd[axis]=0;
-        }else if(player.spd[axis] > 0 && !posDirAdj){
-          player.spd[axis]=0;
+        if(axis!=""){
+          var posDirAdj = collision.max[axis] != player.collider.max[axis]
+          player.body.position[axis] += (posDirAdj ? overlap[axis] : -overlap[axis])
+          if(player.spd[axis] <= 0 && posDirAdj){
+            player.spd[axis]=0;
+          }else if(player.spd[axis] > 0 && !posDirAdj){
+            player.spd[axis]=0;
+          }
+          if(axis == "y"){
+            //TODO this is all wrong
+            player.jumps = player.maxJumps
+            var up = new THREE.Vector3(0,1,0)
+            var adj = up.clone().cross(player.walkDir)
+            var spdInWalk =  player.walkDir.clone().multiplyScalar(player.spd.clone().dot(player.walkDir))
+            var rest = player.spd.clone().sub(spdInWalk)
+            //console.log(rest)
+            var fric = rest.clone().multiplyScalar(0.95)
+            player.spd = fric.clone().add(spdInWalk)
+          }
         }
       }
     })
 
+// //TODO: need to do this over all collisions to avoid random stops by looking for repelling pushes in cases with adjacent boxes
+//     collisions.forEach((collision)=>{
+//
+//
+//     })
+
+
+
+    //update camera
     stage.camera.position.copy(player.getCameraPos())
 		stage.camera.lookAt(player.getCameraLook())
   })
