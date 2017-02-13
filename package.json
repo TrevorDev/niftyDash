@@ -27,6 +27,7 @@
     "@types/request": "0.0.31",
     "@types/request-promise": "^3.0.32",
     "@types/sequelize": "^4.0.39",
+    "@types/three": "^0.83.3",
     "@types/vue": "^1.0.30",
     "awesomplete": "^1.1.1",
     "babel-polyfill": "^6.20.0",
@@ -42,6 +43,7 @@
     "request-promise": "^4.1.1",
     "sequelize": "^3.28.0",
     "slideout": "^1.0.1",
+    "three": "^0.84.0",
     "vue": "^2.1.8",
     "vue-router": "^2.1.1"
   },

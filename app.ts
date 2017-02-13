@@ -49,6 +49,12 @@ async function main(){
 	app.get('/classic',async function(req, res) {
 		res.render('classic')
 	});
+	app.get('/niftyWorld',async function(req, res) {
+		res.render('niftyWorld')
+	});
+	app.get('/niftyWorldEditor',async function(req, res) {
+		res.render('niftyWorldEditor')
+	});
 
 	app.get("/api/user/getWidgets", watchAsyncError(user.getWidgets))
 	app.post("/api/user/create", watchAsyncError(user.create))
@@ -79,7 +85,7 @@ async function main(){
 				res.end()
 			})
 		}else{
-			res.sendfile(reqFile, {root: './public/compiledTS'});
+			res.sendFile(reqFile, {root: './public/compiledTS'});
 		}
 	});
 
