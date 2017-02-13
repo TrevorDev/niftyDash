@@ -77,12 +77,15 @@ async function main(){
 		//TODO: cache this in production or generate all files beforehand
 		let reqFile:string = req.params[0]
 		if(process.env.NODE_ENV != "production"){
-			let stream = browserify(["./public/ts/"+reqFile]).bundle()
+			console.log("browserify start")
+			console.log(require.resolve("vue"))
+			let stream = browserify(["./public/ts/"+reqFile], {insertGlobals: true, detectGlobals: false, noParse: [require.resolve("vue"), require.resolve("jquery"), require.resolve("three")]}).bundle()
 			stream.on("data", function(buffer){
 				res.write(buffer)
 			})
 			stream.on("end", function(){
 				res.end()
+				console.log("browserify done")
 			})
 		}else{
 			res.sendFile(reqFile, {root: './public/compiledTS'});

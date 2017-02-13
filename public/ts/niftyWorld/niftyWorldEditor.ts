@@ -1,4 +1,4 @@
-require("babel-polyfill");
+//require("babel-polyfill");
 
 import $ = require("jquery")
 import Vue = require("vue");
@@ -44,7 +44,7 @@ var main = async ()=>{
   //island
   var island = new THREE.Object3D()
   var islandGroundGeo = new THREE.SphereGeometry( 5,5,5, 0, Math.PI, 0, Math.PI );
-  var islandGround = new THREE.Mesh( islandGroundGeo, MATERIALS.DEFAULT );
+  var islandGround = new THREE.Mesh( islandGroundGeo, MATERIALS.SAND );
   islandGround.rotation.x = -Math.PI/2
   islandGround.scale.z = 0.5
   island.castShadow = true;

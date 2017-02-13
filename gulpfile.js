@@ -7,16 +7,17 @@ var getDirName = require("path").dirname
 //TODO make this file in a non hacky way
 gulp.task('default', function () {
 
-  console.log("compiling tsc files")
+  console.log("compiling tsc files---------------------------------")
   exec("tsc", function(error, stdout, stderr) {
     if(stderr){
       console.log(stderr)
       console.log("please install typescript. npm install typescript -g")
     }else{
-      console.log("done.")
+      console.log("done---------------------------------")
       compileBabel(function(){
         //TODO this might not catch all files
         glob("public/ts/**/*.js", function (er, files) {
+          console.log("broswerifying output ---------------------------------")
           console.log(files)
           files.forEach(function(file){
             mkdirp(getDirName(file.replace("/ts/","/compiledTS/")), function (err) {
@@ -44,7 +45,7 @@ var compileBabel = function(cb){
   }).filter(function(dir){
     return excludedFolders.indexOf(dir) == -1
   })
-  console.log("compiling tsc output with babel")
+  console.log("compiling tsc output with babel---------------------------------")
 
   babelFolders =babelFolders.concat(filesToAdd);
 
@@ -52,7 +53,7 @@ var compileBabel = function(cb){
 
   babelFolders.forEach(function(dir){
     console.log("compiling "+dir)
-    var compileString = dir.indexOf(".") == -1 ? "babel --presets es2015 "+dir+" --out-dir "+dir : "babel --presets es2015 "+dir+" --out-file "+dir
+    var compileString = dir.indexOf(".") == -1 ? "babel "+dir+" --out-dir "+dir : "babel "+dir+" --out-file "+dir
     console.log(compileString)
     exec(compileString, function(error, stdout, stderr) {
       if(stderr){
@@ -64,7 +65,7 @@ var compileBabel = function(cb){
       }
       runningCount--;
       if(runningCount==0){
-        console.log("DONE ALL BABEL")
+        console.log("DONE ALL BABEL---------------------------------")
         cb()
       }
     });

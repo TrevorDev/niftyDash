@@ -1,5 +1,3 @@
-require("babel-polyfill");
-
 import $ = require("jquery")
 import Vue = require("vue");
 
@@ -19,12 +17,12 @@ var main = async ()=>{
   var ambiant = new THREE.AmbientLight(0xFFFFFF, 0.1);
   stage.scene.add(ambiant);
 
-  var point1 = new THREE.PointLight()
+  var point1 = new THREE.PointLight(0xFFFFFF, 0.1)
   point1.position.y += 3
   point1.position.z += 3
   stage.scene.add(point1);
 
-  var point2 = new THREE.PointLight()
+  var point2 = new THREE.PointLight(0xFFFFFF, 0.1)
   point2.position.y += 0
   point2.position.x += 2
   stage.scene.add(point2);
@@ -37,7 +35,7 @@ var main = async ()=>{
   //island
   var island = new THREE.Object3D()
   var islandGroundGeo = new THREE.SphereGeometry( 5,5,5, 0, Math.PI, 0, Math.PI );
-  var islandGround = new THREE.Mesh( islandGroundGeo, MATERIALS.DEFAULT );
+  var islandGround = new THREE.Mesh( islandGroundGeo, MATERIALS.SAND );
   islandGround.rotation.x = -Math.PI/2
   islandGround.scale.z = 0.5
   island.castShadow = true;
@@ -93,7 +91,6 @@ var main = async ()=>{
     blocks.forEach((block, i)=>{
       var collision = player.collider.clone().intersect(block.collider)
       if(!collision.isEmpty()){
-        console.log("hit")
         var overlap = collision.max.clone().sub(collision.min)
         if(overlap.x <= overlap.y && overlap.x <= overlap.z){
           player.body.position.x += (collision.max.x == player.collider.max.x ? -overlap.x  : overlap.x)

@@ -20,13 +20,20 @@ export default {
     //console.log(globalUniforms.time.value)
   },
   DEFAULT: new THREE.MeshPhongMaterial({
-					color: 0xfff6ad,
-					//metalness: 0.0
-				}),
+		map: THREE.ImageUtils.loadTexture('/public/img/cubeFace.png')
+		//metalness: 0.0
+	}),
+  CUBE: new THREE.MeshPhongMaterial({
+    map: THREE.ImageUtils.loadTexture('/public/img/cubeFace.png')
+  }),
+  SAND: new THREE.MeshPhongMaterial({
+		color: 0xfff6ad,
+		//metalness: 0.0
+	}),
   LEAF: new THREE.MeshStandardMaterial({
-					color: 0x1b4917,
-					metalness: 0.2
-				}),
+		color: 0x1b4917,
+		metalness: 0.2
+	}),
   MOON: new THREE.ShaderMaterial( {
     lights: true,
   	uniforms: defaultUniforms,

@@ -8,7 +8,7 @@ class Block {
   collider:THREE.Box3 = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
 
   constructor(x, y, z){
-    this.body = new THREE.Mesh(new THREE.BoxGeometry(x,y,z), materials.DEFAULT);
+    this.body = new THREE.Mesh(new THREE.BoxGeometry(x,y,z), materials.CUBE);
     this.update();
   }
 
