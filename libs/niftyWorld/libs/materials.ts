@@ -19,11 +19,11 @@ export default {
     globalUniforms.time.value += delta
     //console.log(globalUniforms.time.value)
   },
-  DEFAULT: new THREE.MeshPhongMaterial({
+  DEFAULT: new THREE.MeshLambertMaterial({
 		map: THREE.ImageUtils.loadTexture('/public/img/cubeFace.png')
 		//metalness: 0.0
 	}),
-  CUBE: new THREE.MeshPhongMaterial({
+  CUBE: new THREE.MeshLambertMaterial({
     map: THREE.ImageUtils.loadTexture('/public/img/cubeFace.png')
   }),
   SAND: new THREE.MeshPhongMaterial({

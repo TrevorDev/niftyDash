@@ -8,7 +8,7 @@ class Character {
   walkDir:THREE.Vector3
   view:THREE.Vector3 = new THREE.Vector3(0,0,0)
   collider:THREE.Box3 = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
-  moveAcc = 0.01;
+  moveAcc = 0.00003;
   maxJumps = 1;
   jumps = 1;
   constructor(public controller:Controller){
@@ -35,7 +35,7 @@ class Character {
   }
   xMouseVal = 0;
   yMouseVal = 0;
-  update(){
+  update(delta){
     var mouoseSpd = 1/700
     //move mouse and limit verticle rotation
     var xChange =  this.xMouseVal - this.controller.getValue("rotX")* mouoseSpd;
@@ -50,8 +50,10 @@ class Character {
     }
     this.view.y += xChange
 
+
+
     //gravity
-    this.spd.y -= 0.01
+    var accel = new THREE.Vector3(0, -0.00004, 0);
 
     //key input
     this.walkDir = new THREE.Vector3()
@@ -72,19 +74,24 @@ class Character {
       this.walkDir.x -= Math.cos(this.view.y) * this.moveAcc
     }
     if(this.controller.isDown("jump") && this.jumps > 0){
-      this.spd.y = 0.3
+      this.spd.y = 0.02
       this.jumps--
     }
+    accel.add(this.walkDir)
+    // if(this.jumps != this.maxJumps){
+    //   this.walkDir.multiplyScalar(0.2);
+    // }
 
-    if(this.jumps != this.maxJumps){
-      this.walkDir.multiplyScalar(0.2);
+
+
+    this.body.position.add((this.spd.clone().multiplyScalar(delta)).add(accel.clone().multiplyScalar(delta).multiplyScalar(1/2)) )
+    this.spd.add(accel.clone().multiplyScalar(delta))
+
+    if(this.spd.length() > 0.1){
+      this.spd.setLength(0.1)
     }
 
-    //colliison with objects
-    this.spd.add(this.walkDir)
 
-
-    this.body.position.add(this.spd)
     this.body.rotation.y = this.view.y
     if(this.body.position.y < -100){
       this.body.position.copy(new THREE.Vector3(0,0,0))

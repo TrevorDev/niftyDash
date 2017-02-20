@@ -73,7 +73,6 @@ var main = async ()=>{
   }
   var level = getParameterByName('level') || '0'
   var resp = await $.get("/public/levels/"+level+".json")
-  console.log(resp)
 
   //walls
   var blocks: Block[] = []
@@ -84,6 +83,7 @@ var main = async ()=>{
     newB.body.position.x = c.gridPos.x * bSize
     newB.body.position.y = c.gridPos.y * bSize
     newB.body.position.z = c.gridPos.z * bSize
+    newB.gridPos = new THREE.Vector3(Math.round(c.gridPos.x), Math.round(c.gridPos.y), Math.round(c.gridPos.z))
     newB.update()
     stage.scene.add(newB.body)
     blocks.push(newB)
@@ -92,15 +92,18 @@ var main = async ()=>{
 
   //main loop
   stage.startRender((delta, time)=>{
-    player.update()
 
-    var collisions = []
+    player.update(delta)
+
+    //Handle collisions
+    var axisDone = []
     blocks.forEach((block, i)=>{
       var collision = player.collider.clone().intersect(block.collider)
       if(!collision.isEmpty()){
-        //collisions.push(collision)
         var overlap = collision.max.clone().sub(collision.min)
         var axis = ""
+
+        //find which axis to handle the collision
         if(overlap.x != 0 && overlap.x <= overlap.y && overlap.x <= overlap.z){
           axis = "x"
         }else if(overlap.y != 0 && overlap.y <= overlap.x && overlap.y <= overlap.z){
@@ -108,36 +111,50 @@ var main = async ()=>{
         }else if(overlap.z != 0 && overlap.z <= overlap.y && overlap.z <= overlap.x){
           axis = "z"
         }
-        if(axis!=""){
+
+        if(axis!="" && axisDone.indexOf(axis) == -1){
+          //determine which side of the axis the collision occured
           var posDirAdj = collision.max[axis] != player.collider.max[axis]
-          player.body.position[axis] += (posDirAdj ? overlap[axis] : -overlap[axis])
-          if(player.spd[axis] <= 0 && posDirAdj){
-            player.spd[axis]=0;
-          }else if(player.spd[axis] > 0 && !posDirAdj){
-            player.spd[axis]=0;
-          }
-          if(axis == "y"){
-            //TODO this is all wrong
-            player.jumps = player.maxJumps
-            var up = new THREE.Vector3(0,1,0)
-            var adj = up.clone().cross(player.walkDir)
-            var spdInWalk =  player.walkDir.clone().multiplyScalar(player.spd.clone().dot(player.walkDir))
-            var rest = player.spd.clone().sub(spdInWalk)
-            //console.log(rest)
-            var fric = rest.clone().multiplyScalar(0.95)
-            player.spd = fric.clone().add(spdInWalk)
+
+          //handle aabb adjacent block issue by not handling physics for adjacent walls
+          var nextBlock = blocks.filter((b)=>{
+            return block.gridPos.x == (b.gridPos.x + (axis == 'x' ? (posDirAdj ? -1 : 1) : 0)) && block.gridPos.y == (b.gridPos.y + (axis == 'y' ? (posDirAdj ? -1 : 1) : 0)) && block.gridPos.z == (b.gridPos.z + (axis == 'z' ? (posDirAdj ? -1 : 1) : 0))
+          })[0]
+          if(!nextBlock){
+            //only do collision once per axis per frame
+            //TODO avoid this by updating aabb so collision wont occur multiple times
+            axisDone.push(axis)
+
+            //collision adjustment
+            player.body.position[axis] += (posDirAdj ? overlap[axis] : -overlap[axis])
+            if(player.spd[axis] <= 0 && posDirAdj){
+              player.spd[axis]=0;
+            }else if(player.spd[axis] > 0 && !posDirAdj){
+              player.spd[axis]=0;
+            }
+
+            //apply friction when touching ground
+            if(axis == "y"){
+              //TODO this is all wrong
+              player.jumps = player.maxJumps
+              var up = new THREE.Vector3(0,1,0)
+              var adj = up.clone().cross(player.walkDir)
+              var len = player.spd.clone().dot(player.walkDir.normalize())
+              if(len < 0){
+                //apply friction to all
+                player.spd.multiplyScalar(Math.pow(0.99,delta))
+              }else{
+                //apply friction only to adjacent axis to dir
+                var spdInWalk =  player.walkDir.clone().normalize().multiplyScalar(len)
+                var rest = player.spd.clone().sub(spdInWalk)
+                var fric = rest.clone().multiplyScalar(Math.pow(0.99,delta))
+                player.spd = fric.clone().add(spdInWalk)
+              }
+            }
           }
         }
       }
     })
-
-// //TODO: need to do this over all collisions to avoid random stops by looking for repelling pushes in cases with adjacent boxes
-//     collisions.forEach((collision)=>{
-//
-//
-//     })
-
-
 
     //update camera
     stage.camera.position.copy(player.getCameraPos())

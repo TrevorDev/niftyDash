@@ -20,6 +20,7 @@ class Stage {
   }
 
   startRender(renderLoop){
+    var frameCount = 0
     var render = ()=>{
       //TODO, may want to add composer
       if(this.enableVR){
@@ -27,8 +28,16 @@ class Stage {
       }else{
         this.renderer.render( this.scene, this.camera )
       }
-
+      frameCount++
     }
+    var fpsCount = ()=>{
+      console.log(frameCount)
+      frameCount = 0
+      setTimeout(fpsCount, 1000)
+    }
+    fpsCount()
+
+
     var last = Date.now()
     var curTime = 0
     var animate = ()=>{
@@ -43,6 +52,10 @@ class Stage {
       last = now
       curTime += delta
 
+      //TODO why does startup have large de
+      if(delta > 100){
+        delta = 0
+      }
       renderLoop(delta, curTime)
 			render();
     }
