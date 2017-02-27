@@ -21,9 +21,6 @@
     "filesGlob": [
       "**/*.ts"
     ],
-    "files": [
-      "libs/niftyWorld/objects/blockCreator.ts"
-    ],
     "compileOnSave": true,
     "buildOnSave": false,
     "atom": {
