@@ -1,0 +1,3 @@
+//DO NOT MODIFY THE INDEXES, THESE ARE USED IN LEVEL FILES
+enum BlockType { BLOCK, GOAL, DEATH, COIN, ENEMY1 }
+export default BlockType

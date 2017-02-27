@@ -79,7 +79,11 @@ async function main(){
 		if(process.env.NODE_ENV != "production"){
 			console.log("browserify start")
 			console.log(require.resolve("vue"))
-			let stream = browserify(["./public/ts/"+reqFile], {insertGlobals: true, detectGlobals: false, noParse: [require.resolve("vue"), require.resolve("jquery"), require.resolve("three")]}).bundle()
+
+			//TODO do i need these?
+			//insertGlobals: true, detectGlobals: false,
+
+			let stream = browserify(["./public/ts/"+reqFile], {noParse: [require.resolve("vue"), require.resolve("jquery"), require.resolve("three")]}).bundle()
 			stream.on("data", function(buffer){
 				res.write(buffer)
 			})

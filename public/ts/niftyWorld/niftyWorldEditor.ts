@@ -4,7 +4,8 @@ import $ = require("jquery")
 import Vue = require("vue");
 
 import Stage from "../../../libs/niftyWorld/objects/stage";
-import GridObject from "../../../libs/niftyWorld/objects/gridObject";
+import Block from "../../../libs/niftyWorld/objects/block";
+import BlockCreator from "../../../libs/niftyWorld/objects/BlockSpawner";
 import MATERIALS from "../../../libs/niftyWorld/libs/materials"
 import OBJLoader from "../../../libs/niftyWorld/threeExtensions/OBJLoader"
 import ViveController from "../../../libs/niftyWorld/threeExtensions/ViveController"
@@ -79,12 +80,12 @@ var main = async ()=>{
   var lastKey = ""
 
   //controllers
-  var controller1 = new ViveController( 0 );
-  controller1.standingMatrix = stage.VRControls.getStandingMatrix();
-  stage.scene.add( controller1 );
-  var controller2 = new ViveController( 1 );
-  controller2.standingMatrix = stage.VRControls.getStandingMatrix();
-  stage.scene.add( controller2 );
+  var controllerDrag = new ViveController( 0 );
+  controllerDrag.standingMatrix = stage.VRControls.getStandingMatrix();
+  stage.scene.add( controllerDrag );
+  var controllerPlace = new ViveController( 1 );
+  controllerPlace.standingMatrix = stage.VRControls.getStandingMatrix();
+  stage.scene.add( controllerPlace );
   var loader = new OBJLoader(undefined);
 	loader.setPath( '/public/models/' );
   var realCont:any
@@ -94,36 +95,41 @@ var main = async ()=>{
 		var controller = object.children[ 0 ];
 		controller.material.map = loader.load( 'onepointfive_texture.png' );
 		controller.material.specularMap = loader.load( 'onepointfive_spec.png' );
-		controller1.add( object.clone() );
+		controllerDrag.add( object.clone() );
     realCont = object.clone()
-		controller2.add( realCont );
+		controllerPlace.add( realCont );
 	} );
-  var tipGeo = new THREE.BoxGeometry( 0.01, 0.01, 0.01 );
-  var tipMesh = new THREE.Mesh( tipGeo, MATERIALS.DEFAULT )
-  tipMesh.position.z = -0.3
-  controller2.add(tipMesh)
+
+  var brickCreator = new BlockCreator();
+  controllerPlace.add(brickCreator.body)
+
   //FOR DEBUGGING, auto start vr
   setTimeout(()=>{stage.VREffect.requestPresent()},100)
 
   //main loop
   stage.startRender((delta, time)=>{
-    controller1.update();
-		controller2.update();
+    controllerDrag.update();
+		controllerPlace.update();
 
-    //rotate origin when controller1 is pressed
-    if(controller1.getButtonPressedState("trigger") == "down"){
-      THREE.SceneUtils.attach(originMesh, stage.scene, controller1)
-    }else if(controller1.getButtonPressedState("trigger") == "up"){
-			THREE.SceneUtils.detach(originMesh, controller1, stage.scene)
+    //rotate origin when controllerDrag is pressed
+    if(controllerDrag.getButtonPressedState("trigger") == "down"){
+      THREE.SceneUtils.attach(originMesh, stage.scene, controllerDrag)
+    }else if(controllerDrag.getButtonPressedState("trigger") == "up"){
+			THREE.SceneUtils.detach(originMesh, controllerDrag, stage.scene)
+    }
+
+    if(controllerPlace.getButtonPressedState("thumbpad") == "down"){
+      console.log("press")
+      brickCreator.nextType()
     }
 
     //create cube
-    if(controller2.getButtonPressedState("trigger") == "down"){
+    if(controllerPlace.getButtonPressedState("trigger") == "down"){
       lastKey = ""
     }
-    if(controller2.getButtonState("trigger")){
+    if(controllerPlace.getButtonState("trigger")){
       var sizeOfCube = 0.05;
-      var controllerPosRelativeToOriginMesh:THREE.Vector3 = tipMesh.getWorldPosition().sub(originMesh.getWorldPosition());
+      var controllerPosRelativeToOriginMesh:THREE.Vector3 = brickCreator.body.getWorldPosition().sub(originMesh.getWorldPosition());
 
       //get axis of originMesh
       var matrix = new THREE.Matrix4();
@@ -148,32 +154,32 @@ var main = async ()=>{
       if(key != lastKey){
         if(creation.cubes[key]){
           var old = creation.cubes[key]
-          originMesh.remove(old.mesh)
+          originMesh.remove(old.body)
           delete creation.cubes[key]
         }else{
-          var newGeo = new THREE.BoxGeometry( sizeOfCube, sizeOfCube, sizeOfCube );
-          var newMesh = new THREE.Mesh( newGeo, MATERIALS.DEFAULT )
+          creation.cubes[key] = new Block(brickCreator.typeOfBlock, sizeOfCube, newPos.clone().divideScalar(sizeOfCube))
           var added = right.multiplyScalar(newPos.x).add(up.multiplyScalar(newPos.y)).add(forward.multiplyScalar(newPos.z))
-          newMesh.position.copy(originMesh.getWorldPosition().clone().add(added))
-          newMesh.rotation.setFromRotationMatrix(originMesh.matrixWorld)
+          creation.cubes[key].body.position.copy(originMesh.getWorldPosition().clone().add(added))
+          creation.cubes[key].body.rotation.setFromRotationMatrix(originMesh.matrixWorld)
           //update matrixworld required when attaching to another object after modifying newmesh.pos/rot as they dont update newmesh.matrixWorld
-          newMesh.updateMatrixWorld(true);
-
-          THREE.SceneUtils.attach(newMesh, stage.scene, originMesh)
-          creation.cubes[key] = new GridObject(newMesh, newPos.clone().divideScalar(sizeOfCube), "block")
+          creation.cubes[key].body.updateMatrixWorld(true);
+          stage.scene.add(creation.cubes[key].body)
+          THREE.SceneUtils.attach(creation.cubes[key].body, stage.scene, originMesh)
         }
         lastKey = key
       }
     }
 
-    if(controller2.getButtonPressedState("menu") == "down"){
+    if(controllerPlace.getButtonPressedState("menu") == "down"){
+      console.log("hit")
       for(var key in creation.cubes){
-        originMesh.remove(creation.cubes[key].mesh)
+        console.log("key")
+        originMesh.remove(creation.cubes[key].body)
         delete creation.cubes[key]
       }
     }
 
-    if(controller1.getButtonPressedState("menu") == "down"){
+    if(controllerDrag.getButtonPressedState("menu") == "down"){
       var dl = (filename, text)=>{
         var element = document.createElement('a');
         element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));

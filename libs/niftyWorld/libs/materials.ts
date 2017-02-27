@@ -23,8 +23,24 @@ export default {
 		map: THREE.ImageUtils.loadTexture('/public/img/cubeFace.png')
 		//metalness: 0.0
 	}),
-  CUBE: new THREE.MeshLambertMaterial({
+  BLOCK: new THREE.MeshLambertMaterial({
     map: THREE.ImageUtils.loadTexture('/public/img/cubeFace.png')
+  }),
+  GOAL: new THREE.MeshLambertMaterial({
+    map: THREE.ImageUtils.loadTexture('/public/img/cubeFace.png'),
+    color: 0x33CC33
+  }),
+  DEATH: new THREE.MeshLambertMaterial({
+    map: THREE.ImageUtils.loadTexture('/public/img/cubeFace.png'),
+    color: 0x222222
+  }),
+  ENEMY1: new THREE.MeshLambertMaterial({
+    map: THREE.ImageUtils.loadTexture('/public/img/cubeFace.png'),
+    color: 0x777777
+  }),
+  COIN: new THREE.MeshLambertMaterial({
+    map: THREE.ImageUtils.loadTexture('/public/img/cubeFace.png'),
+    color: 0xffff00
   }),
   SAND: new THREE.MeshPhongMaterial({
 		color: 0xfff6ad,
@@ -80,7 +96,7 @@ export default {
         vec3 up = vec3(0.0, 1.0, 0.0);
         float zenithAngle = acos(max(0.0, dot(up, normalize(vPositionInWorld - vec3(0,0,0)))));
         float darkenes = 0.5;
-        gl_FragColor = vec4(zenithAngle*0.05*darkenes,zenithAngle*0.2*darkenes, zenithAngle*0.5*darkenes, 1.0);
+        gl_FragColor = vec4(zenithAngle*0.1*darkenes,zenithAngle*0.3*darkenes, zenithAngle*0.5*darkenes, 1.0);
       }`
   }),
   WATER: new THREE.ShaderMaterial( {

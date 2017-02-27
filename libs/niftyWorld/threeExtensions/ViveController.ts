@@ -17,7 +17,9 @@ var ViveController = function ( id ) {
 	var gripsArePressed = false;
 	var menuIsPressed = false;
 
+	var thumbpadPressed = "";
 	var triggerPressed = "";
+	var gripsPressed = "";
 	var menuPressed = "";
 
 	function findGamepad( id ) {
@@ -62,7 +64,9 @@ var ViveController = function ( id ) {
 	};
 
 	this.getButtonPressedState = function ( button ) {
+		if ( button === 'thumbpad' ) return thumbpadPressed;
 		if ( button === 'trigger' ) return triggerPressed;
+		if ( button === 'grips' ) return gripsPressed;
 		if ( button === 'menu' ) return menuPressed;
 	};
 
@@ -95,26 +99,27 @@ var ViveController = function ( id ) {
 
 			}
 
+			thumbpadPressed = ""
 			if ( thumbpadIsPressed !== gamepad.buttons[ 0 ].pressed ) {
 
 				thumbpadIsPressed = gamepad.buttons[ 0 ].pressed;
 				scope.dispatchEvent( { type: thumbpadIsPressed ? 'thumbpaddown' : 'thumbpadup' } );
-
+				thumbpadPressed = thumbpadIsPressed ? "down" : "up";
 			}
 
 			triggerPressed = ""
 			if ( triggerIsPressed !== gamepad.buttons[ 1 ].pressed ) {
-
 				triggerIsPressed = gamepad.buttons[ 1 ].pressed;
 				scope.dispatchEvent( { type: triggerIsPressed ? 'triggerdown' : 'triggerup' } );
 				triggerPressed = triggerIsPressed ? "down" : "up";
 			}
 
+			gripsPressed = ""
 			if ( gripsArePressed !== gamepad.buttons[ 2 ].pressed ) {
 
 				gripsArePressed = gamepad.buttons[ 2 ].pressed;
 				scope.dispatchEvent( { type: gripsArePressed ? 'gripsdown' : 'gripsup' } );
-
+				gripsPressed = gripsArePressed ? "down" : "up";
 			}
 
 			menuPressed = ""

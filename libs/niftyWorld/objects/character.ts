@@ -11,6 +11,7 @@ class Character {
   moveAcc = 0.00003;
   maxJumps = 1;
   jumps = 1;
+  jumpDown = false;
   constructor(public controller:Controller){
     this.body = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), materials.DEFAULT);
     this.spd = new THREE.Vector3(0,0,0)
@@ -74,8 +75,13 @@ class Character {
       this.walkDir.x -= Math.cos(this.view.y) * this.moveAcc
     }
     if(this.controller.isDown("jump") && this.jumps > 0){
-      this.spd.y = 0.02
-      this.jumps--
+      if(!this.jumpDown){
+        this.spd.y = 0.02
+        this.jumps--
+      }
+      this.jumpDown = true
+    }else{
+      this.jumpDown = false
     }
     accel.add(this.walkDir)
     // if(this.jumps != this.maxJumps){
@@ -94,13 +100,17 @@ class Character {
 
     this.body.rotation.y = this.view.y
     if(this.body.position.y < -100){
-      this.body.position.copy(new THREE.Vector3(0,0,0))
-      this.spd.copy(new THREE.Vector3(0,0,0))
+      this.reset()
     }
     this.updateCollision()
   }
   updateCollision(){
     this.collider.setFromObject(this.body)
+  }
+
+  reset(){
+    this.body.position.copy(new THREE.Vector3(0,0,0))
+    this.spd.copy(new THREE.Vector3(0,0,0))
   }
 }
 

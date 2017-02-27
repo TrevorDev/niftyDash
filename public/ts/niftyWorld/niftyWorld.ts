@@ -5,6 +5,7 @@ import Stage from "../../../libs/niftyWorld/objects/stage";
 import Controller from "../../../libs/niftyWorld/objects/controller";
 import Character from "../../../libs/niftyWorld/objects/character"
 import Block from "../../../libs/niftyWorld/objects/block"
+import BlockType from "../../../libs/niftyWorld/objects/blockType"
 import MATERIALS from "../../../libs/niftyWorld/libs/materials"
 import request = require("request")
 import THREE = require("three")
@@ -78,13 +79,7 @@ var main = async ()=>{
   var blocks: Block[] = []
   var bSize = 3;
   resp.objects.forEach((c)=>{
-
-    var newB = new Block(bSize,bSize,bSize)
-    newB.body.position.x = c.gridPos.x * bSize
-    newB.body.position.y = c.gridPos.y * bSize
-    newB.body.position.z = c.gridPos.z * bSize
-    newB.gridPos = new THREE.Vector3(Math.round(c.gridPos.x), Math.round(c.gridPos.y), Math.round(c.gridPos.z))
-    newB.update()
+    var newB = new Block(c.type, bSize, new THREE.Vector3(Math.round(c.gridPos.x), Math.round(c.gridPos.y), Math.round(c.gridPos.z)))
     stage.scene.add(newB.body)
     blocks.push(newB)
   })
@@ -95,62 +90,124 @@ var main = async ()=>{
 
     player.update(delta)
 
-    //Handle collisions
+
     var axisDone = []
     blocks.forEach((block, i)=>{
+      //Enemy movement
+      if(block.type == BlockType.ENEMY1){
+        var towardsVec = player.body.position.clone().sub(block.body.position)
+        if(towardsVec.length() < 20){
+          block.body.position.add(towardsVec.multiplyScalar(0.01))
+          block.update()
+        }
+      }
+
+      //Handle collisions
       var collision = player.collider.clone().intersect(block.collider)
       if(!collision.isEmpty()){
-        var overlap = collision.max.clone().sub(collision.min)
-        var axis = ""
+        if(block.type == BlockType.BLOCK){
+          var overlap = collision.max.clone().sub(collision.min)
 
-        //find which axis to handle the collision
-        if(overlap.x != 0 && overlap.x <= overlap.y && overlap.x <= overlap.z){
-          axis = "x"
-        }else if(overlap.y != 0 && overlap.y <= overlap.x && overlap.y <= overlap.z){
-          axis = "y"
-        }else if(overlap.z != 0 && overlap.z <= overlap.y && overlap.z <= overlap.x){
-          axis = "z"
-        }
+          //TODO FIX THIS CODE, the for loop is insane
+          var found = true
+          for(var i = 0; i < 3 && found;i++){
+            found = false
+            var axis = ""
 
-        if(axis!="" && axisDone.indexOf(axis) == -1){
+            //find which axis to handle the collision
+            if(overlap.x != 0 && overlap.x <= overlap.y && overlap.x <= overlap.z){
+              axis = "x"
+            }else if(overlap.y != 0 && overlap.y <= overlap.x && overlap.y <= overlap.z){
+              axis = "y"
+            }else if(overlap.z != 0 && overlap.z <= overlap.y && overlap.z <= overlap.x){
+              axis = "z"
+            }
+
+            if(axis!="" && axisDone.indexOf(axis) == -1){
+              //determine which side of the axis the collision occured
+              var posDirAdj = collision.max[axis] != player.collider.max[axis]
+
+              //handle aabb adjacent block issue by not handling physics for adjacent walls
+              var adjPos = new THREE.Vector3(
+                (block.gridPos.x + (axis == 'x' ? (!posDirAdj ? -1 : 1) : 0)),
+                (block.gridPos.y + (axis == 'y' ? (!posDirAdj ? -1 : 1) : 0)),
+                (block.gridPos.z + (axis == 'z' ? (!posDirAdj ? -1 : 1) : 0))
+              )
+              var nextBlock = blocks.filter((b)=>{
+                return adjPos.equals(b.gridPos)
+              })[0]
+              if(!nextBlock){
+                console.log(overlap.y)
+                console.log(axis + " " + posDirAdj)
+                //only do collision once per axis per frame
+                //TODO avoid this by updating aabb so collision wont occur multiple times
+                axisDone.push(axis)
+
+                //collision adjustment
+                player.body.position[axis] += (posDirAdj ? overlap[axis] : -overlap[axis])
+                if(player.spd[axis] <= 0 && posDirAdj){
+                  player.spd[axis]=0;
+                }else if(player.spd[axis] > 0 && !posDirAdj){
+                  player.spd[axis]=0;
+                }
+
+                //apply friction when touching ground
+                if(axis == "y"){
+                  player.jumpDown = false
+                  //TODO this is all wrong
+                  player.jumps = player.maxJumps
+                  var up = new THREE.Vector3(0,1,0)
+                  var adj = up.clone().cross(player.walkDir)
+                  var len = player.spd.clone().dot(player.walkDir.normalize())
+                  if(len < 0){
+                    //apply friction to all
+                    player.spd.multiplyScalar(Math.pow(0.99,delta))
+                  }else{
+                    //apply friction only to adjacent axis to dir
+                    var spdInWalk =  player.walkDir.clone().normalize().multiplyScalar(len)
+                    var rest = player.spd.clone().sub(spdInWalk)
+                    var fric = rest.clone().multiplyScalar(Math.pow(0.99,delta))
+                    player.spd = fric.clone().add(spdInWalk)
+                  }
+                }
+                found=true
+              }else{
+                overlap[axis] = Number.MAX_VALUE
+              }
+            }else{
+              found=true
+            }
+          }
+        }else if(block.type == BlockType.GOAL){
+          var curLevel = parseInt(level)
+          curLevel++
+          location.href = "/niftyWorld?level="+curLevel;
+        }else if(block.type == BlockType.DEATH){
+          player.reset()
+        }else if(block.type == BlockType.COIN){
+          player.maxJumps++
+          stage.scene.remove(block.body)
+          blocks.splice(i, 1);
+        }else if(block.type == BlockType.ENEMY1){
+          //TODO this logic is also above for reg collision
+          var overlap = collision.max.clone().sub(collision.min)
+          var axis = ""
+          //find which axis to handle the collision
+          if(overlap.x != 0 && overlap.x <= overlap.y && overlap.x <= overlap.z){
+            axis = "x"
+          }else if(overlap.y != 0 && overlap.y <= overlap.x && overlap.y <= overlap.z){
+            axis = "y"
+          }else if(overlap.z != 0 && overlap.z <= overlap.y && overlap.z <= overlap.x){
+            axis = "z"
+          }
           //determine which side of the axis the collision occured
           var posDirAdj = collision.max[axis] != player.collider.max[axis]
-
-          //handle aabb adjacent block issue by not handling physics for adjacent walls
-          var nextBlock = blocks.filter((b)=>{
-            return block.gridPos.x == (b.gridPos.x + (axis == 'x' ? (posDirAdj ? -1 : 1) : 0)) && block.gridPos.y == (b.gridPos.y + (axis == 'y' ? (posDirAdj ? -1 : 1) : 0)) && block.gridPos.z == (b.gridPos.z + (axis == 'z' ? (posDirAdj ? -1 : 1) : 0))
-          })[0]
-          if(!nextBlock){
-            //only do collision once per axis per frame
-            //TODO avoid this by updating aabb so collision wont occur multiple times
-            axisDone.push(axis)
-
-            //collision adjustment
-            player.body.position[axis] += (posDirAdj ? overlap[axis] : -overlap[axis])
-            if(player.spd[axis] <= 0 && posDirAdj){
-              player.spd[axis]=0;
-            }else if(player.spd[axis] > 0 && !posDirAdj){
-              player.spd[axis]=0;
-            }
-
-            //apply friction when touching ground
-            if(axis == "y"){
-              //TODO this is all wrong
-              player.jumps = player.maxJumps
-              var up = new THREE.Vector3(0,1,0)
-              var adj = up.clone().cross(player.walkDir)
-              var len = player.spd.clone().dot(player.walkDir.normalize())
-              if(len < 0){
-                //apply friction to all
-                player.spd.multiplyScalar(Math.pow(0.99,delta))
-              }else{
-                //apply friction only to adjacent axis to dir
-                var spdInWalk =  player.walkDir.clone().normalize().multiplyScalar(len)
-                var rest = player.spd.clone().sub(spdInWalk)
-                var fric = rest.clone().multiplyScalar(Math.pow(0.99,delta))
-                player.spd = fric.clone().add(spdInWalk)
-              }
-            }
+          if(axis == "y" && posDirAdj){
+            stage.scene.remove(block.body)
+            blocks.splice(i, 1);
+            player.spd.y = 0.02
+          }else{
+            player.reset()
           }
         }
       }
