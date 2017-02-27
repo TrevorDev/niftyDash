@@ -5,7 +5,7 @@ import Vue = require("vue");
 
 import Stage from "../../../libs/niftyWorld/objects/stage";
 import Block from "../../../libs/niftyWorld/objects/block";
-import BlockCreator from "../../../libs/niftyWorld/objects/BlockSpawner";
+import BlockCreator from "../../../libs/niftyWorld/objects/blockSpawner";
 import MATERIALS from "../../../libs/niftyWorld/libs/materials"
 import OBJLoader from "../../../libs/niftyWorld/threeExtensions/OBJLoader"
 import ViveController from "../../../libs/niftyWorld/threeExtensions/ViveController"
