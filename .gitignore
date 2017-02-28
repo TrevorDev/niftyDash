@@ -1,4 +1,5 @@
 node_modules/
+cache/
 bower_components/
 *.js
 *.map

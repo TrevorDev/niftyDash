@@ -65,10 +65,10 @@ async function main(){
 	app.post("/api/viewedItem/add", watchAsyncError(viewedItem.add))
 	app.get("/api/user/getViewedItems", watchAsyncError(user.getViewedItems))
 
+	//THESE ARE CACHED to update this see appFactory.ts
 	app.get('/api/comic/xkcd/latest', watchAsyncError(comic.xkcd))
 	app.get('/api/comic/dilbert/latest', watchAsyncError(comic.dilbert))
 	app.get('/api/comic/cAndH/latest', watchAsyncError(comic.cAndH))
-
 	app.get('/api/spotify/latest', watchAsyncError(spotify.topChart))
 
 	app.get('/api/tv/:show', watchAsyncError(tvShow.tv))

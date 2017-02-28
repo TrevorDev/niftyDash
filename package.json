@@ -34,6 +34,7 @@
     "babel-preset-es2015": "^6.18.0",
     "body-parser": "^1.15.2",
     "browserify": "^13.1.0",
+    "connect-cache": "^0.2.2",
     "express": "^4.14.0",
     "express-session": "^1.14.1",
     "jade": "^1.11.0",

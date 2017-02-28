@@ -9,7 +9,6 @@ export default {
     for(var i = num-19;i<=num;i++){
         latest.push({link: "http://xkcd.com/"+i, name: i, id: i})
     }
-  	console.log(latest)
     res.send(latest)
   },
   cAndH: async function(req, res){

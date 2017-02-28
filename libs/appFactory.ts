@@ -2,13 +2,26 @@ import express = require("express")
 import bodyParser = require("body-parser")
 import session = require("express-session")
 import config from "../libs/config"
+import connect_cache = require("connect-cache")
 
 export default {
 	createApp: function(){
+		var c = require('connect')
+		for(var key in c){
+			console.log(key)
+		}
+
 		var app = express();
 		app.set('views', __dirname + '/../views');
 		app.set('view engine', 'jade');
 		app.set('view options', { layout: false });
+
+		//TODO factor this out this file is meant to be universal to al lprojects
+		var minuite = 60000
+		app.use(connect_cache({rules: [
+			{regex: /.*?api\/comic/, ttl: minuite*5},
+			{regex: /.*?api\/spotify/, ttl: minuite*5}
+		]}))
 
 		//TODO make this secret and move to config.ts
 		app.use(session({
