@@ -31,7 +31,7 @@ class Stage {
       frameCount++
     }
     var fpsCount = ()=>{
-      console.log(frameCount)
+      //console.log(frameCount)
       frameCount = 0
       setTimeout(fpsCount, 1000)
     }

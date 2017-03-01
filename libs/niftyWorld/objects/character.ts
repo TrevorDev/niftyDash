@@ -39,9 +39,9 @@ class Character {
   update(delta){
     var mouoseSpd = 1/700
     //move mouse and limit verticle rotation
-    var xChange =  this.xMouseVal - this.controller.getValue("rotX")* mouoseSpd;
+    var xChange =  this.controller.getValue("rotX")* mouoseSpd;
     this.xMouseVal = this.controller.getValue("rotX")* mouoseSpd
-    var yChange = this.yMouseVal - this.controller.getValue("rotY")* mouoseSpd
+    var yChange = this.controller.getValue("rotY")* mouoseSpd
     this.yMouseVal = this.controller.getValue("rotY")* mouoseSpd
     this.view.x -= yChange
     if(this.view.x  > Math.PI/2 - 0.1){

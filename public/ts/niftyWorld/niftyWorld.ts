@@ -64,7 +64,36 @@ var main = async ()=>{
 		rotX: "mouseX",
 		rotY: "mouseY",
 		click: "mouseLeft"
-	})
+	}, {
+    slot: 0,
+  	controls: {
+  		left: {axis: 0, value: function(val){
+  			return (val < -0.40)
+  		}},
+      right: {axis: 0, value: function(val){
+  			return (val > 0.40)
+  		}},
+      up: {axis: 1, value: function(val){
+  			return (val < -0.40)
+  		}},
+      down: {axis: 1, value: function(val){
+  			return (val > 0.40)
+  		}},
+      rotX: {axis: 2, value: function(val){
+        if(Math.abs(val) < 0.2){
+          return 0
+        }
+  			return val*-50
+  		}},
+      rotY: {axis: 3, value: function(val){
+        if(Math.abs(val) < 0.2){
+          return 0
+        }
+  			return val*-50
+  		}},
+      jump: {button: 3}
+  	}
+  })
 	var player = new Character(controller);
   stage.scene.add(player.body)
 
@@ -137,8 +166,6 @@ var main = async ()=>{
                 return adjPos.equals(b.gridPos)
               })[0]
               if(!nextBlock){
-                console.log(overlap.y)
-                console.log(axis + " " + posDirAdj)
                 //only do collision once per axis per frame
                 //TODO avoid this by updating aabb so collision wont occur multiple times
                 axisDone.push(axis)
