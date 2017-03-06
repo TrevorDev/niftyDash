@@ -19,7 +19,8 @@ OBJLoader.prototype = {
 
 		var scope = this;
 
-		var loader = new THREE.XHRLoader( scope.manager );
+		var anyThree:any = THREE
+		var loader = new anyThree.XHRLoader( scope.manager );
 		loader.setPath( this.path );
 		loader.load( url, function ( text ) {
 
@@ -129,7 +130,7 @@ OBJLoader.prototype = {
 
 		}
 
-		function addFace( a, b, c, d,  ua, ub, uc, ud, na, nb, nc, nd ) {
+		function addFace( a, b, c, d,  ua?, ub?, uc?, ud?, na?, nb?, nc?, nd? ) {
 
 			var ia = parseVertexIndex( a );
 			var ib = parseVertexIndex( b );

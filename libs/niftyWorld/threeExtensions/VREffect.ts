@@ -20,9 +20,8 @@ var VREffect = function( renderer, onError ) {
 	var frameData = null;
 
 	if ( 'VRFrameData' in window ) {
-
-		frameData = new window.VRFrameData();
-
+		var anyWindow:any = window
+		frameData = new anyWindow.VRFrameData();
 	}
 
 	function gotVRDisplays( displays ) {
