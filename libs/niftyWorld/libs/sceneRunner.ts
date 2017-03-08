@@ -4,7 +4,7 @@ import THREE = require("three")
 var lastKey = ""
 
 export default {
-	runObjects: (delta, stage, player, creation, originMeshScale)=>{
+	runObjects: (delta, stage, player, creation)=>{
 		//handle collisions
 	    var blocks = []
 	    for(var key in creation.cubes){
@@ -23,7 +23,7 @@ export default {
 	      }
 
 	      //Handle collisions
-	      block.update() //TODO this shouldnt be needed
+	      //block.update() //TODO this shouldnt be needed
 	      var collision = player.collider.clone().intersect(block.collider)
 	      if(!collision.isEmpty()){
 	        if(block.type == BlockType.BLOCK){
@@ -65,7 +65,7 @@ export default {
 
 	                //collision adjustment
 	                console.log(overlap[axis])
-	                player.body.position[axis] += (posDirAdj ? overlap[axis]*(1/originMeshScale) : -overlap[axis]*(1/originMeshScale))//TODO: this shouldnt need to be done
+	                player.body.position[axis] += (posDirAdj ? overlap[axis] : -overlap[axis])
 	                if(player.spd[axis] <= 0 && posDirAdj){
 	                  player.spd[axis]=0;
 	                }else if(player.spd[axis] > 0 && !posDirAdj){

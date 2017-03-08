@@ -1,6 +1,7 @@
 import THREE = require("three")
 import materials from "../libs/materials"
 import BlockType from "../objects/blockType"
+import Box3Helper from "../libs/box3Helper"
 
 class Block {
   body:THREE.Mesh
@@ -19,7 +20,7 @@ class Block {
   }
 
   update(){
-    this.collider.setFromObject(this.body)
+    this.collider = Box3Helper.createFromObject(this.body)
   }
 
   getJson(){

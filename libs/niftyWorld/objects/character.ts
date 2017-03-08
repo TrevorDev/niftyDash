@@ -1,6 +1,7 @@
 import THREE = require("three")
 import materials from "../libs/materials"
 import Controller from "../objects/controller"
+import Box3Helper from "../libs/box3Helper"
 
 class Character {
   body:THREE.Mesh
@@ -105,7 +106,7 @@ class Character {
     this.updateCollision()
   }
   updateCollision(){
-    this.collider.setFromObject(this.body)
+    this.collider = Box3Helper.createFromObject(this.body)
   }
 
   reset(){
