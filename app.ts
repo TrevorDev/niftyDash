@@ -16,6 +16,8 @@ import spotify from "./controllers/spotify";
 import tvShow from "./controllers/tvShow";
 import viewedItem from "./controllers/viewedItem";
 
+var exec = require('child_process').exec;
+
 function watchAsyncError(af){
 	return async function(req, resp){
 		try{
@@ -31,6 +33,7 @@ async function main(){
 	//await db.sync({force: true})
 	// await preloadDB();
 	//console.log(appFactory)
+
 	let app;
 	try{
 		app = appFactory.createApp();
@@ -102,6 +105,10 @@ async function main(){
 				process.env.NODE_ENV = 'production'
 			}
 			console.log("Env: "+process.env.NODE_ENV)
+			
+			if(process.env.NODE_ENV != 'production'){
+				exec("tsc --watch")
+			}
 	});
 }
 try{

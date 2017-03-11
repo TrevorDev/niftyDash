@@ -30,6 +30,15 @@ export default {
 		stage.scene.add( skyMesh );
 		return skyMesh
 	},
+	createVideo: (stage, video)=>{
+		var texture = new THREE.VideoTexture( video );
+		var geo = new THREE.PlaneGeometry(10,10)
+		var mat = new THREE.MeshLambertMaterial()
+		mat.map = texture
+		var mesh = new THREE.Mesh(geo, mat)
+		stage.scene.add( mesh )
+		return mesh
+	},
 	createIsland: (stage)=>{
 		var island = new THREE.Object3D()
 		var islandGroundGeo = new THREE.SphereGeometry( 5,5,5, 0, Math.PI, 0, Math.PI );
