@@ -58,6 +58,9 @@ async function main(){
 	app.get('/niftyWorldEditor',async function(req, res) {
 		res.render('niftyWorldEditor')
 	});
+	app.get('/niftySpace',async function(req, res) {
+		res.render('niftySpace')
+	});
 
 	app.get("/api/user/getWidgets", watchAsyncError(user.getWidgets))
 	app.post("/api/user/create", watchAsyncError(user.create))
@@ -105,8 +108,9 @@ async function main(){
 				process.env.NODE_ENV = 'production'
 			}
 			console.log("Env: "+process.env.NODE_ENV)
-			
+
 			if(process.env.NODE_ENV != 'production'){
+				//TODO print output from this
 				exec("tsc --watch")
 			}
 	});

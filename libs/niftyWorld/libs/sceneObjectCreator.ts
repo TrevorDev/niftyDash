@@ -4,6 +4,7 @@ import OBJLoader from "../../../libs/niftyWorld/threeExtensions/OBJLoader"
 import Character from "../../../libs/niftyWorld/objects/character";
 import Controller from "../../../libs/niftyWorld/objects/controller";
 import THREE = require("three")
+import html2canvas = require("html2canvas")
 
 export default {
 	createLights: (stage)=>{
@@ -32,6 +33,7 @@ export default {
 	},
 	createVideo: (stage, video)=>{
 		var texture = new THREE.VideoTexture( video );
+		texture.minFilter = THREE.LinearFilter
 		var geo = new THREE.PlaneGeometry(10,10)
 		var mat = new THREE.MeshLambertMaterial()
 		mat.map = texture
@@ -116,12 +118,12 @@ export default {
 		return originMesh
 	},
 	createControllers: (stage)=>{
-		var controllerDrag = new ViveController( 0 );
-		controllerDrag.standingMatrix = stage.VRControls.getStandingMatrix();
-		stage.scene.add( controllerDrag );
-		var controllerPlace = new ViveController( 1 );
-		controllerPlace.standingMatrix = stage.VRControls.getStandingMatrix();
-		stage.scene.add( controllerPlace );
+		var left = new ViveController( 0 );
+		left.standingMatrix = stage.VRControls.getStandingMatrix();
+		stage.scene.add( left );
+		var right = new ViveController( 1 );
+		right.standingMatrix = stage.VRControls.getStandingMatrix();
+		stage.scene.add( right );
 		var loader = new OBJLoader(undefined);
 		loader.setPath( '/public/models/' );
 		var realCont:any
@@ -131,15 +133,38 @@ export default {
 			var controller = object.children[ 0 ];
 			controller.material.map = loader.load( 'onepointfive_texture.png' );
 			controller.material.specularMap = loader.load( 'onepointfive_spec.png' );
-			controllerDrag.add( object.clone() );
+			left.add( object.clone() );
 		realCont = object.clone()
-			controllerPlace.add( realCont );
+			right.add( realCont );
 		});
 		return {
-			controllerDrag: controllerDrag,
-			controllerPlace: controllerPlace
+			left: left,
+			right: right
 		}
+	},
+
+	htmlViewer: (stage, element)=>{
+		
+
+
+	    html2canvas(element).then(function(canvas) {
+        	//document.body.appendChild(canvas);
+        	var geo = new THREE.PlaneGeometry(10,10)
+			var mat = new THREE.MeshLambertMaterial()
+
+        	var texture = new THREE.CanvasTexture(canvas);
+			texture.minFilter = THREE.LinearFilter
+			mat.map = texture
+
+
+			
+			var mesh = new THREE.Mesh(geo, mat)
+
+			stage.scene.add( mesh )
+			mesh.position.z -= 8
+	    });
 	}
+
 	// ,
 	// createPlayer: (stage)=>{
 		
