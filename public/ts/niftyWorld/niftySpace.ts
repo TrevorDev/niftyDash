@@ -40,7 +40,6 @@ var main = async ()=>{
   //console.log(resp)
 
   var vids = []
-
   var parser = new htmlparser.Parser({
       onopentag: function(name, attribs:any){
           var classes:string = attribs.class ? attribs.class : ""
@@ -85,7 +84,6 @@ var main = async ()=>{
       v.mesh = mesh
       stage.scene.add( mesh );
       })
-
 
   })
 
