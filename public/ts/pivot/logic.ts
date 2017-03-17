@@ -32,7 +32,11 @@ async function main(){
 
   if(newUser){
     //ADD DEFAULT WIDGETS
-    var adds = ["REDDIT", "HN", "XKCD", "DILBERT", "CANDH", "TOP_SPOTIFY"].map((a)=>{
+    var adds = [
+        widgets.widgetList.REDDIT.type,
+        widgets.widgetList.HN.type,
+        widgets.widgetList.XKCD.type
+      ].map((a)=>{
       var formData = {
         type: a,
         name: widgets.widgetList[a].friendlyName

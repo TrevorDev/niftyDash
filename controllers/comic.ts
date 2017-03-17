@@ -1,4 +1,7 @@
+import parser = require('rss-parser');
 import request = require("request-promise")
+
+
 
 export default {
   xkcd: async function(req, res){
@@ -37,5 +40,16 @@ export default {
   		return {link: "http://dilbert.com/strip/"+i, name: i, id: i};
   	})
   	res.send(latest)
+  },
+  smbc: async function(req, res){
+    parser.parseURL('http://www.smbc-comics.com/rss.php', function(err, parsed) {
+      parsed.feed.entries.forEach(function(entry) {
+        console.log(entry.title + ':' + entry.link);
+      })
+      res.send(parsed.feed.entries.map((e)=>{return {link: e.link, name: e.title, id:e.link}}))
+    })
   }
+
+
+  
 }

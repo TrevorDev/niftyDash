@@ -59,6 +59,7 @@ class Story{
 }
 
 
+//ADD WIDGET BY UPDATING INDEX.JADE, CONTROLLER, APP.TS 
 //TODO add better default name or rename types to be better
 var widgetList = {
   REDDIT: class redditWidget extends newsfeedWidget {
@@ -137,6 +138,18 @@ var widgetList = {
     getStories = async function(){
       var widget = this;
       this.stories = (await $.get("/api/comic/dilbert/latest"))
+        .map((i)=>new Story(widget.name+i.id,i.name, i.link, i.link))
+        .filter((i)=> !this.viewedItems[i.id])
+      await this.updateNotification()
+    }
+  },
+  SMBC: class sbmcWidget extends newsfeedWidget {
+    static type = "SMBC"
+    static friendlyName = "SMBC"
+    static defaultSettings = JSON.stringify({})
+    getStories = async function(){
+      var widget = this;
+      this.stories = (await $.get("/api/comic/smbc/latest"))
         .map((i)=>new Story(widget.name+i.id,i.name, i.link, i.link))
         .filter((i)=> !this.viewedItems[i.id])
       await this.updateNotification()

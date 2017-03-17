@@ -126,8 +126,7 @@ var main = async ()=>{
       }
       
     }
-   
-  }
+  })
 }
 $(document).ready(()=>{
   main()

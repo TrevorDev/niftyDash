@@ -1,7 +1,6 @@
 require("babel-polyfill");
 
 import appFactory from "./libs/appFactory";
-import preloadDB from "./libs/preLoadDB";
 import browserify = require("browserify")
 import config from "./libs/config"
 
@@ -14,7 +13,7 @@ import user from "./controllers/user";
 import comic from "./controllers/comic";
 import spotify from "./controllers/spotify";
 import tvShow from "./controllers/tvShow";
-import viewedItem from "./controllers/viewedItem";
+import viewedItem from "./controllers/viewedItem"
 
 var exec = require('child_process').exec;
 
@@ -30,8 +29,10 @@ function watchAsyncError(af){
 }
 
 async function main(){
+	if(process.argv[2] == "p"){
+		process.env.NODE_ENV = 'production'
+	}
 	//await db.sync({force: true})
-	// await preloadDB();
 	//console.log(appFactory)
 
 	let app;
@@ -75,6 +76,7 @@ async function main(){
 	app.get('/api/comic/xkcd/latest', watchAsyncError(comic.xkcd))
 	app.get('/api/comic/dilbert/latest', watchAsyncError(comic.dilbert))
 	app.get('/api/comic/cAndH/latest', watchAsyncError(comic.cAndH))
+	app.get('/api/comic/smbc/latest', watchAsyncError(comic.smbc))
 	app.get('/api/spotify/latest', watchAsyncError(spotify.topChart))
 
 	app.get('/api/tv/:show', watchAsyncError(tvShow.tv))
@@ -104,15 +106,13 @@ async function main(){
 
 	app.listen(3000, function(){
 	    console.log("Server running");
-			if(process.argv[2] == "p"){
-				process.env.NODE_ENV = 'production'
-			}
+			
 			console.log("Env: "+process.env.NODE_ENV)
-
-			if(process.env.NODE_ENV != 'production'){
-				//TODO print output from this
-				exec("tsc --watch")
-			}
+			//TODO what do i do for compiling ts?????????????
+			// if(process.env.NODE_ENV != 'production'){
+			// 	//TODO print output from this
+			// 	exec("tsc --watch")
+			// }
 	});
 }
 try{

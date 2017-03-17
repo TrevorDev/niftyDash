@@ -59,6 +59,10 @@ block content
               label.form-check-inline
                 input.form-check-input(type="checkbox" value="TOP_SPOTIFY" v-model="checkedWidgets")
                 p New Music 
+            div
+              label.form-check-inline
+                input.form-check-input(type="checkbox" value="SMBC" v-model="checkedWidgets")
+                p Saturday Morning Breakfast Cereal
             button.btn Save     
         //- FEED
         div(v-if="selectedWidget")

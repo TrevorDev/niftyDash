@@ -17,11 +17,13 @@ export default {
 		app.set('view options', { layout: false });
 
 		//TODO factor this out this file is meant to be universal to al lprojects
-		var minuite = 60000
-		app.use(connect_cache({rules: [
-			{regex: /.*?api\/comic/, ttl: minuite*5},
-			{regex: /.*?api\/spotify/, ttl: minuite*5}
-		]}))
+		if(process.env.NODE_ENV == 'production'){
+			var minuite = 60000
+			app.use(connect_cache({rules: [
+				{regex: /.*?api\/comic/, ttl: minuite*5},
+				{regex: /.*?api\/spotify/, ttl: minuite*5}
+			]}))
+		}
 
 		//TODO make this secret and move to config.ts
 		app.use(session({
