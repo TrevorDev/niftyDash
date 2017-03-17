@@ -21,7 +21,8 @@ export default {
 			var minuite = 60000
 			app.use(connect_cache({rules: [
 				{regex: /.*?api\/comic/, ttl: minuite*5},
-				{regex: /.*?api\/spotify/, ttl: minuite*5}
+				{regex: /.*?api\/spotify/, ttl: minuite*5},
+				{regex: /.*?api\/youtube/, ttl: minuite*5}
 			]}))
 		}
 

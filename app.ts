@@ -11,6 +11,7 @@ import "./models/models"
 
 import user from "./controllers/user";
 import comic from "./controllers/comic";
+import youtube from "./controllers/youtube";
 import spotify from "./controllers/spotify";
 import tvShow from "./controllers/tvShow";
 import viewedItem from "./controllers/viewedItem"
@@ -77,6 +78,7 @@ async function main(){
 	app.get('/api/comic/dilbert/latest', watchAsyncError(comic.dilbert))
 	app.get('/api/comic/cAndH/latest', watchAsyncError(comic.cAndH))
 	app.get('/api/comic/smbc/latest', watchAsyncError(comic.smbc))
+	app.get('/api/youtube/latest', watchAsyncError(youtube.trending))
 	app.get('/api/spotify/latest', watchAsyncError(spotify.topChart))
 
 	app.get('/api/tv/:show', watchAsyncError(tvShow.tv))

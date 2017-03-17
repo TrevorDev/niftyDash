@@ -155,6 +155,18 @@ var widgetList = {
       await this.updateNotification()
     }
   },
+  YOUTUBE: class sbmcWidget extends newsfeedWidget {
+    static type = "YOUTUBE"
+    static friendlyName = "Youtube"
+    static defaultSettings = JSON.stringify({})
+    getStories = async function(){
+      var widget = this;
+      this.stories = (await $.get("/api/youtube/latest"))
+        .map((i)=>new Story(widget.name+i.id,i.name, i.link, i.link))
+        .filter((i)=> !this.viewedItems[i.id])
+      await this.updateNotification()
+    }
+  },
   TV: class tvWidget extends newsfeedWidget {
     static type = "TV"
     static friendlyName = "TV"
