@@ -57,12 +57,16 @@ block content
                 p Cyanide and Happiness 
             div
               label.form-check-inline
-                input.form-check-input(type="checkbox" value="YOUTUBE" v-model="checkedWidgets")
-                p Youtube trending
+                input.form-check-input(type="checkbox" value="SMBC" v-model="checkedWidgets")
+                p Saturday Morning Breakfast Cereal
             div
               label.form-check-inline
                 input.form-check-input(type="checkbox" value="TOP_SPOTIFY" v-model="checkedWidgets")
                 p New Music
+            div
+              label.form-check-inline
+                input.form-check-input(type="checkbox" value="YOUTUBE" v-model="checkedWidgets")
+                p Youtube trending
             button.btn Save     
         //- FEED
         div(v-if="selectedWidget")
