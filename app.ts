@@ -16,6 +16,10 @@ import spotify from "./controllers/spotify";
 import tvShow from "./controllers/tvShow";
 import viewedItem from "./controllers/viewedItem"
 
+import request = require("request-promise")
+import $ = require("cheerio")
+import parser = require('rss-parser');
+
 var exec = require('child_process').exec;
 
 function watchAsyncError(af){
@@ -48,6 +52,14 @@ async function main(){
 	app.get('/',async function(req, res) {
 		res.render('index')
 	});
+	app.get('/blog',async function(req, res) {
+		res.render('niftyBlog')
+	});
+	app.get('/blog/:post',async function(req, res) {
+		var resp = await  request("https://medium.com/@trevorbaron/"+req.params.post)
+		var post = $("div.section-content", resp).html()
+		res.render('niftyBlogPost', {post: post})
+	});
 	app.get('/niftyStuff',async function(req, res) {
 		res.render('niftyNews')
 	});
@@ -62,7 +74,7 @@ async function main(){
 	});
 	app.get('/niftySpace',async function(req, res) {
 		res.render('niftySpace')
-	});
+	})
 
 	app.get("/api/user/getWidgets", watchAsyncError(user.getWidgets))
 	app.post("/api/user/create", watchAsyncError(user.create))
@@ -72,7 +84,16 @@ async function main(){
 	app.post("/api/user/deleteWidget", watchAsyncError(user.deleteWidget))
 	app.post("/api/viewedItem/add", watchAsyncError(viewedItem.add))
 	app.get("/api/user/getViewedItems", watchAsyncError(user.getViewedItems))
-
+	app.get("/api/blog/latest" ,async function(req, res) {
+		parser.parseURL("https://medium.com/feed/@trevorbaron", (err, x)=>{
+			var posts = x.feed.entries.map((e)=>{
+				var id = e.link.split("/")[4].split("?")[0]
+				return {name: e.title, link: "/blog/"+id,id: id}
+			})
+			console.log(posts)
+			res.send(posts)
+		})
+	});
 	//THESE ARE CACHED to update this see appFactory.ts
 	app.get('/api/comic/xkcd/latest', watchAsyncError(comic.xkcd))
 	app.get('/api/comic/dilbert/latest', watchAsyncError(comic.dilbert))
@@ -111,10 +132,10 @@ async function main(){
 			
 			console.log("Env: "+process.env.NODE_ENV)
 			//TODO what do i do for compiling ts?????????????
-			// if(process.env.NODE_ENV != 'production'){
-			// 	//TODO print output from this
-			// 	exec("tsc --watch")
-			// }
+			if(process.env.NODE_ENV != 'production'){
+				//TODO print output from this
+				exec("tsc --watch")
+			}
 	});
 }
 try{

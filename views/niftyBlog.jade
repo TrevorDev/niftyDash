@@ -1,0 +1,8 @@
+extends ./header.jade
+block content
+	#blogList.hidden(style="max-width: 768px; margin:auto;")
+		ul.list-group
+			li.btn.list-group-item(v-for="post in posts"   style="text-align: inherit;white-space: normal;")
+				a(:href="post.link") {{post.name}}
+block scripts
+	script(src="/browserify/niftyBlog/logic.js")
