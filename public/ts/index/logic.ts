@@ -183,17 +183,16 @@ async function main(){
       var story = template.selectedWidget.stories[0]
       if(story != null){
         if(event.keyCode == "a".charCodeAt(0)){
-          console.log(story)
           app.storyClicked(story)
         }else if(event.keyCode == "d".charCodeAt(0)){
           chosenOnes.push(story.commentsUrl ? story.commentsUrl : story.url)
           app.storyClicked(story)
-        }else if(event.keyCode == "s".charCodeAt(0)){
-          chosenOnes.forEach((url)=>{
-            window.open(url)
-          })
-          chosenOnes = []
         }
+      }else if(event.keyCode == "s".charCodeAt(0)){
+        chosenOnes.forEach((url)=>{
+          window.open(url)
+        })
+        chosenOnes = []
       }
   };
 
