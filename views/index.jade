@@ -17,6 +17,10 @@ block content
                 i.fa.fa-gear
               span(v-if="displayConfig")  Hide Settings
               span(v-else)  Settings
+            li.btn.list-group-item(id="undo" v-on:click="undoClicked()" style="text-align: inherit;")
+              span
+                i.fa.fa-undo
+              span  Undo
             div
               span
                 a(v-bind:href="accountUrl")  Link
@@ -24,7 +28,7 @@ block content
               <br><br>
               a(href="#" v-on:click="createNewAccount()") Create New Account
               <br><br>
-            div(style="width:100%;text-align: center;font-size: 0.7em;") Ver 0.2.1 - Please add any feedback 
+            div(style="width:100%;text-align: center;font-size: 0.7em;") Ver 0.2.2 - Please add any feedback 
               a(href="https://docs.google.com/document/d/1RsXUN85k7vbmU2VrBhYbr17s5elcvTPhGAEqNViqt8c/edit?usp=sharing") here.
       .col-12.col-md-9.col-xl-10.hidden
         p.float-left.hidden-md-up

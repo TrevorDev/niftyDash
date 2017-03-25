@@ -80,6 +80,8 @@ async function main(){
     displayConfig:false,
     checkedWidgets: usersWidgets.map((w)=>w.constructor.type)
   }
+
+  var prevClicked = []
   const app:any = new Vue({
     el: '#app',
     data: template,
@@ -118,6 +120,10 @@ async function main(){
         //this was needed to not delete wrong element
         setTimeout(async ()=>{
           $.post("/api/viewedItem/add", {widgetId:template.selectedWidget.id, item: story.id})
+
+          prevClicked.push({parent: template.selectedWidget, story: story})
+          var histLen = 10
+          prevClicked.slice(prevClicked.length-histLen, prevClicked.length)
           template.selectedWidget.stories = template.selectedWidget.stories.filter((s)=>s.id != story.id)
 
           await template.selectedWidget.updateNotification()
@@ -163,6 +169,12 @@ async function main(){
       createNewAccount: ()=>{
         localStorage.clear();
         window.location.href = "/";
+      },
+      undoClicked: async ()=>{
+        var i = prevClicked.pop()
+        if(i){
+          i.parent.stories.unshift(i.story)
+        }
       }
     }
   })
@@ -188,11 +200,29 @@ async function main(){
           chosenOnes.push(story.commentsUrl ? story.commentsUrl : story.url)
           app.storyClicked(story)
         }
-      }else if(event.keyCode == "s".charCodeAt(0)){
+      }
+      if(event.keyCode == "e".charCodeAt(0)){
         chosenOnes.forEach((url)=>{
           window.open(url)
         })
         chosenOnes = []
+      }
+      if(event.keyCode == "q".charCodeAt(0)){
+        console.log("undo")
+        app.undoClicked()
+      }
+
+      if(event.keyCode == "w".charCodeAt(0)){
+        var newWidget = app._data.widgets[app._data.widgets.indexOf(template.selectedWidget)-1]
+        if(newWidget){
+          template.selectedWidget = newWidget
+        }
+      }
+      if(event.keyCode == "s".charCodeAt(0)){
+        var newWidget = app._data.widgets[app._data.widgets.indexOf(template.selectedWidget)+1]
+        if(newWidget){
+          template.selectedWidget = newWidget
+        }
       }
   };
 
