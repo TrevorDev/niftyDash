@@ -6,7 +6,6 @@ import objectPromise from "../../../libs/objectPromise";
 var Awesomplete = require('awesomplete')
 
 async function main(){
-  alert("test1")
   //get url params
   var ar:Array<string> = (window.location.search.match(/[\?&](.*?)=([^&#]*)/g) || []);
   var params:any = ar.reduce((prev, cur)=>{prev[cur.split("=")[0].slice(1)]=cur.split("=")[1];return prev},{})
@@ -81,7 +80,7 @@ async function main(){
     displayConfig:false,
     checkedWidgets: usersWidgets.map((w)=>w.constructor.type)
   }
-  const app = new Vue({
+  const app:any = new Vue({
     el: '#app',
     data: template,
     methods: {
@@ -118,9 +117,6 @@ async function main(){
       storyClicked: async (story)=>{
         //this was needed to not delete wrong element
         setTimeout(async ()=>{
-          console.log(template.selectedWidget.name)
-          console.log(story.title)
-          console.log(story.id)
           $.post("/api/viewedItem/add", {widgetId:template.selectedWidget.id, item: story.id})
           template.selectedWidget.stories = template.selectedWidget.stories.filter((s)=>s.id != story.id)
 
@@ -179,6 +175,27 @@ async function main(){
     $('.row-offcanvas').toggleClass('active')
     //$(this).hide();
   });
+
+  var chosenOnes = []
+
+  document.onkeypress = function (e) {
+      var event:any = e || window.event;
+      var story = template.selectedWidget.stories[0]
+      if(story != null){
+        if(event.keyCode == "a".charCodeAt(0)){
+          console.log(story)
+          app.storyClicked(story)
+        }else if(event.keyCode == "d".charCodeAt(0)){
+          chosenOnes.push(story.commentsUrl ? story.commentsUrl : story.url)
+          app.storyClicked(story)
+        }else if(event.keyCode == "s".charCodeAt(0)){
+          chosenOnes.forEach((url)=>{
+            window.open(url)
+          })
+          chosenOnes = []
+        }
+      }
+  };
 
   //load widgets
   await objectPromise(usersWidgets.map((w)=>w.init()))
