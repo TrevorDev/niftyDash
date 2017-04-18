@@ -36,67 +36,67 @@ var main = async ()=>{
   //     console.log(e.keyCode)
   // };
 
-  var resp = await $.get("https://www.youtube.com/feed/trending")
-  //console.log(resp)
+  // var resp = await $.get("https://www.youtube.com/feed/trending")
+  // //console.log(resp)
 
-  var vids = []
-  var parser = new htmlparser.Parser({
-      onopentag: function(name, attribs:any){
-          var classes:string = attribs.class ? attribs.class : ""
-          if(name === "div" && classes.indexOf("yt-lockup yt-lockup-tile")!=-1){
-              vids.push({id: attribs['data-context-item-id'], img: null, mesh: null})
-          }
-          if(name == "img" && vids[vids.length-1] != null){
-            if(attribs.src.indexOf("http") != -1){
-              vids[vids.length-1].img = attribs.src
-            }else{
-              vids[vids.length-1].img = attribs["data-thumb"]
-            }
+  // var vids = []
+  // var parser = new htmlparser.Parser({
+  //     onopentag: function(name, attribs:any){
+  //         var classes:string = attribs.class ? attribs.class : ""
+  //         if(name === "div" && classes.indexOf("yt-lockup yt-lockup-tile")!=-1){
+  //             vids.push({id: attribs['data-context-item-id'], img: null, mesh: null})
+  //         }
+  //         if(name == "img" && vids[vids.length-1] != null){
+  //           if(attribs.src.indexOf("http") != -1){
+  //             vids[vids.length-1].img = attribs.src
+  //           }else{
+  //             vids[vids.length-1].img = attribs["data-thumb"]
+  //           }
             
-          }
-      },
-      ontext: function(text){
-          //console.log("-->", text);
-      },
-      onclosetag: function(tagname){
-          if(tagname === "script"){
-              //console.log("That's it?!");
-          }
-      }
-  }, {decodeEntities: true});
-  parser.write(resp);
-  parser.end();
-  console.log(vids)
-  console.log("done")
+  //         }
+  //     },
+  //     ontext: function(text){
+  //         //console.log("-->", text);
+  //     },
+  //     onclosetag: function(tagname){
+  //         if(tagname === "script"){
+  //             //console.log("That's it?!");
+  //         }
+  //     }
+  // }, {decodeEntities: true});
+  // parser.write(resp);
+  // parser.end();
+  // console.log(vids)
+  // console.log("done")
 
-  vids.forEach((v, i)=>{
-      //image
-      //console.log(v.img)
+  // vids.forEach((v, i)=>{
+  //     //image
+  //     //console.log(v.img)
    
-      new THREE.TextureLoader().load(v.img, function(map){
-           var geo = new THREE.PlaneGeometry(3,3)
-      var mat = new THREE.MeshLambertMaterial()
-      var mesh = new THREE.Mesh(geo, mat)
-        mat.map = map
-          mesh.position.z -= 8
-          mesh.position.x += ((i%4) * 4)+5
-          mesh.position.y += ((Math.floor(i/4)) * -4)+5
-      v.mesh = mesh
-      stage.scene.add( mesh );
-      })
+  //     new THREE.TextureLoader().load(v.img, function(map){
+  //          var geo = new THREE.PlaneGeometry(3,3)
+  //     var mat = new THREE.MeshLambertMaterial()
+  //     var mesh = new THREE.Mesh(geo, mat)
+  //       mat.map = map
+  //         mesh.position.z -= 8
+  //         mesh.position.x += ((i%4) * 4)+5
+  //         mesh.position.y += ((Math.floor(i/4)) * -4)+5
+  //     v.mesh = mesh
+  //     stage.scene.add( mesh );
+  //     })
 
-  })
+  // })
 
 
-  elementID="player"
-  $("#body").append("<div id='"+elementID+"' style='position: absolute;left: 0px;top: 0px;z-index: -1000;'></div>")
-  var player = YouTubePlayer(elementID);
-  player.loadVideoById('q6EoRBvdVPQ');
-  player.playVideo().then(()=>{
-    var video:any = $("video", $("#"+elementID).contents()[0])[0]
-    var vidMesh = sceneObjectCreator.createVideo(stage, video)
-    vidMesh.position.z -= 10
-  })
+  // elementID="player"
+  // $("#body").append("<div id='"+elementID+"' style='position: absolute;left: 0px;top: 0px;z-index: -1000;'></div>")
+  // var player = YouTubePlayer(elementID);
+  // player.loadVideoById('q6EoRBvdVPQ');
+  // player.playVideo().then(()=>{
+  //   var video:any = $("video", $("#"+elementID).contents()[0])[0]
+  //   var vidMesh = sceneObjectCreator.createVideo(stage, video)
+  //   vidMesh.position.z -= 10
+  // })
 
   // elementID="twitch"
   // $("#body").append('<iframe id="'+elementID+'" src="https://player.twitch.tv/?channel=jcarverpoker&html5" frameborder="0" allowfullscreen="true" scrolling="no" height="378" width="620"></iframe>')
@@ -106,6 +106,24 @@ var main = async ()=>{
   // var video:any = $("video", twitchIFrame.contents()[0])[0]
   // var vidMesh = sceneObjectCreator.createVideo(stage, video)
   // vidMesh.position.z -= 10
+
+// var resp = await $.get("http://127.0.0.1:8083/google.com")
+// console.log(resp)
+var video = document.createElement( 'video' );
+video.src = 'http://127.0.0.1:8083/127.0.0.1:8080/movie4.ogg';
+video.type="video/ogg; codecs=theora,vorbis"
+video.setAttribute('crossorigin', 'anonymous');
+video.setAttribute( 'webkit-playsinline', 'webkit-playsinline' );
+video.play();
+// setTimeout(()=>{video.pause()}, 1000)
+// vid[0].play()
+  var vidMesh = sceneObjectCreator.createVideo(stage, video)
+  vidMesh.position.z -= 10
+
+//$("body").append(`<video id="video" src="http://localhost:8080/movie.ogg" autoplay="autoplay">`)
+
+  //FOR DEBUGGING, auto start vr
+  //setTimeout(()=>{stage.VREffect.requestPresent()},3000)
 
   stage.startRender((delta, time)=>{
     controllers.left.update()

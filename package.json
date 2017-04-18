@@ -53,8 +53,10 @@
     "sequelize": "^3.28.0",
     "slideout": "^1.0.1",
     "three": "^0.84.0",
+    "three-effectcomposer": "0.0.1",
     "vue": "^2.1.8",
     "vue-router": "^2.1.1",
+    "webrtc-adapter": "^3.3.2",
     "youtube-player": "^4.2.2"
   },
   "browser": {

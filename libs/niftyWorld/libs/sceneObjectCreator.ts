@@ -33,11 +33,13 @@ export default {
 	},
 	createVideo: (stage, video)=>{
 		var texture = new THREE.VideoTexture( video );
-		texture.minFilter = THREE.LinearFilter
+		texture.minFilter = THREE.NearestFilter;
+		texture.maxFilter = THREE.NearestFilter;
+		texture.format = THREE.RGBFormat;
+		texture.generateMipmaps = false;
 		var geo = new THREE.PlaneGeometry(10,10)
-		var mat = new THREE.MeshLambertMaterial()
-		mat.map = texture
-		var mesh = new THREE.Mesh(geo, mat)
+		var material = new THREE.MeshBasicMaterial( { map: texture } );
+		var mesh = new THREE.Mesh(geo, material)
 		stage.scene.add( mesh )
 		return mesh
 	},
@@ -53,10 +55,16 @@ export default {
 		treeMesh.position.y = 3
 		var leafGeo = new THREE.BoxGeometry( 2, 2, 2 );
 		var leafMesh = new THREE.Mesh( leafGeo, MATERIALS.LEAF )
+
+		var thingGeo = new THREE.BoxGeometry( 2, 2, 1 );
+		var thingMesh = new THREE.Mesh( thingGeo, MATERIALS.DEFAULT )
+		thingMesh.position.set(0,2, 2);
+
 		leafMesh.position.y = 3
 		treeMesh.add(leafMesh)
 		island.add(treeMesh)
 		island.add(islandGround)
+		island.add(thingMesh)
 		island.position.y = -5;
 		island.position.z = -10;
 		island.position.x = 20;

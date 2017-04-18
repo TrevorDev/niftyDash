@@ -75,6 +75,9 @@ async function main(){
 	app.get('/niftySpace',async function(req, res) {
 		res.render('niftySpace')
 	})
+	app.get('/niftyRendering',async function(req, res) {
+		res.render('niftyRendering')
+	})
 
 	app.get("/api/user/getWidgets", watchAsyncError(user.getWidgets))
 	app.post("/api/user/create", watchAsyncError(user.create))
@@ -134,7 +137,7 @@ async function main(){
 			//TODO what do i do for compiling ts?????????????
 			if(process.env.NODE_ENV != 'production'){
 				//TODO print output from this
-				exec("tsc --watch")
+				//exec("tsc --watch")
 			}
 	});
 }
