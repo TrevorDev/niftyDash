@@ -71,6 +71,19 @@ export default {
 		stage.scene.add( island );
 		return island
 	},
+	createLand: (stage)=>{
+		var obj = new THREE.Object3D()
+
+		var groundGeo = new THREE.PlaneGeometry(20,20)
+		var ground = new THREE.Mesh(groundGeo, MATERIALS.GROUND )
+		ground.rotateX(-Math.PI/2);
+		ground.position.y -= 5;
+
+		obj.add(ground)
+
+		stage.scene.add( obj );
+		return obj
+	},
 	createPlayer: (stage):Character =>{
 		var controller = new Controller({
 			up: "w",

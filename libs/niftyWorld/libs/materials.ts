@@ -154,5 +154,18 @@ export default {
         float colorVal = (andleBetweenDownAndPlane*0.2 + andleBetweenLightAndPlane*0.8);
         gl_FragColor = vec4(colorVal*0.5, colorVal, 0.8, 0.7);
       }`
-  })
+  }),
+  GROUND: new THREE.MeshLambertMaterial({
+    map: (()=>{
+      var text = THREE.ImageUtils.loadTexture('/public/img/checkerboard.png', null, function ( texture ) {
+
+          texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+          //texture.offset.set( 0, 0 );
+          texture.repeat.set( 10, 10 );
+
+      })
+      return text
+    })()
+    //metalness: 0.0
+  }),
 }

@@ -52,6 +52,7 @@
     "rss-parser": "^2.5.2",
     "sequelize": "^3.28.0",
     "slideout": "^1.0.1",
+    "socket.io": "^1.7.3",
     "three": "^0.84.0",
     "three-effectcomposer": "0.0.1",
     "vue": "^2.1.8",

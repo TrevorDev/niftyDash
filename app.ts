@@ -20,6 +20,10 @@ import request = require("request-promise")
 import $ = require("cheerio")
 import parser = require('rss-parser');
 
+import fs = require('fs');
+import https = require('https');
+import http = require('http');
+
 var exec = require('child_process').exec;
 
 function watchAsyncError(af){
@@ -130,16 +134,25 @@ async function main(){
 		}
 	});
 
-	app.listen(3000, function(){
-	    console.log("Server running");
+	http.createServer(app).listen(3000);
+
+	//generated following http://www.akadia.com/services/ssh_test_certificate.html
+	const serverConfig = {
+	    key: fs.readFileSync('certs/server.key'),
+	    cert: fs.readFileSync('certs/server.crt'),//
+	};
+	https.createServer(serverConfig, app).listen(3001);;
+	console.log("start")
+	// app.listen(3000, function(){
+	//     console.log("Server running");
 			
-			console.log("Env: "+process.env.NODE_ENV)
-			//TODO what do i do for compiling ts?????????????
-			if(process.env.NODE_ENV != 'production'){
-				//TODO print output from this
-				//exec("tsc --watch")
-			}
-	});
+	// 		console.log("Env: "+process.env.NODE_ENV)
+	// 		//TODO what do i do for compiling ts?????????????
+	// 		if(process.env.NODE_ENV != 'production'){
+	// 			//TODO print output from this
+	// 			//exec("tsc --watch")
+	// 		}
+	// });
 }
 try{
 	main()
