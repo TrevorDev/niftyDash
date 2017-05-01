@@ -135,7 +135,8 @@ async function main(){
 	});
 
 	var server = http.createServer(app)
-	var io = require('socket.io')(server);
+	var ioServer = require('socket.io')
+	var io = new ioServer();
 	var rooms = []
 	rooms["main"] = {
 		trackedObjects: []
@@ -190,7 +191,11 @@ async function main(){
 	    key: fs.readFileSync('certs/server.key'),
 	    cert: fs.readFileSync('certs/server.crt'),//
 	};
-	https.createServer(serverConfig, app).listen(3001);;
+	var httpsServer = https.createServer(serverConfig, app).listen(3001);
+
+	io.attach(server)
+	io.attach(httpsServer)
+
 	console.log("start")
 	// app.listen(3000, function(){
 	//     console.log("Server running");
