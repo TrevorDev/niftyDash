@@ -67,9 +67,6 @@ async function main(){
 	app.get('/niftyStuff',async function(req, res) {
 		res.render('niftyNews')
 	});
-	app.get('/classic',async function(req, res) {
-		res.render('classic')
-	});
 	app.get('/niftyWorld',async function(req, res) {
 		res.render('niftyWorld')
 	});
@@ -81,6 +78,9 @@ async function main(){
 	})
 	app.get('/niftyRendering',async function(req, res) {
 		res.render('niftyRendering')
+	})
+	app.get('/niftyChat',async function(req, res) {
+		res.render('niftyChat')
 	})
 
 	app.get("/api/user/getWidgets", watchAsyncError(user.getWidgets))
@@ -134,7 +134,56 @@ async function main(){
 		}
 	});
 
-	http.createServer(app).listen(3000);
+	var server = http.createServer(app)
+	var io = require('socket.io')(server);
+	var rooms = []
+	rooms["main"] = {
+		trackedObjects: []
+	}
+	io.on('connection', function(socket){
+		console.log("new connect")
+
+		//TODO add more rooms, for now only use 1 room
+		var room = "main"
+		socket.join(room)
+
+		//send client all currently tracked objects in their room
+		for(var key in rooms[room].trackedObjects){
+			socket.emit("addObject", rooms[room].trackedObjects[key])
+		}
+
+		//send client new object when another client adds one
+		socket.on("addObject", (obj)=>{
+			//var room = Object.keys(socket.rooms).filter((r)=>r!=socket.id)[0]
+			rooms[room].trackedObjects[obj.guid] = obj
+			socket.broadcast.to(room).emit("addObject", obj)
+		})
+
+		//broadcast updates to all clients
+		//TODO should this be done on server tick all at once instead of per update?
+		socket.on("updateObject", (obj)=>{
+			//console.log("new update")
+			rooms[room].trackedObjects[obj.guid] = obj
+			socket.broadcast.to(room).emit("updateObject", obj)
+		})
+
+		socket.on("audioBuffer", (obj)=>{
+			//console.log(obj)
+			socket.broadcast.to(room).emit('audioBuffer', obj);
+		})
+
+		socket.on("disconnect", ()=>{
+			for(var key in rooms[room].trackedObjects){
+				if(rooms[room].trackedObjects[key].owner == socket.id){
+					console.log("dc")
+					socket.broadcast.to(room).emit("removeObject", rooms[room].trackedObjects[key])
+					delete rooms[room].trackedObjects[key]
+				}
+			}
+			
+		})
+	});
+	server.listen(3000)
 
 	//generated following http://www.akadia.com/services/ssh_test_certificate.html
 	const serverConfig = {

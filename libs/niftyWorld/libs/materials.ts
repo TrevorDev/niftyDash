@@ -155,17 +155,21 @@ export default {
         gl_FragColor = vec4(colorVal*0.5, colorVal, 0.8, 0.7);
       }`
   }),
-  GROUND: new THREE.MeshLambertMaterial({
+  GROUND: new THREE.MeshStandardMaterial({
     map: (()=>{
-      var text = THREE.ImageUtils.loadTexture('/public/img/checkerboard.png', null, function ( texture ) {
+      var text = THREE.ImageUtils.loadTexture('/public/img/default.png', null, function ( texture ) {
 
           texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
           //texture.offset.set( 0, 0 );
-          texture.repeat.set( 10, 10 );
+          texture.repeat.set( 100, 100 );
 
       })
       return text
     })()
     //metalness: 0.0
+  }),
+  SMILE_FACE_MOUTH_OPEN: new THREE.MeshLambertMaterial({
+    map: THREE.ImageUtils.loadTexture('/public/img/FaceMouthOpen.png'),
+    color: 0xFFFFFF
   }),
 }

@@ -74,10 +74,10 @@ export default {
 	createLand: (stage)=>{
 		var obj = new THREE.Object3D()
 
-		var groundGeo = new THREE.PlaneGeometry(20,20)
+		var groundGeo = new THREE.PlaneGeometry(50,50)
 		var ground = new THREE.Mesh(groundGeo, MATERIALS.GROUND )
 		ground.rotateX(-Math.PI/2);
-		ground.position.y -= 5;
+		ground.position.y -= 0;
 
 		obj.add(ground)
 
@@ -155,7 +155,7 @@ export default {
 			controller.material.map = loader.load( 'onepointfive_texture.png' );
 			controller.material.specularMap = loader.load( 'onepointfive_spec.png' );
 			left.add( object.clone() );
-		realCont = object.clone()
+			realCont = object.clone()
 			right.add( realCont );
 		});
 		return {

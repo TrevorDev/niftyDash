@@ -47,7 +47,7 @@ class Stage {
         this.VREffect.requestAnimationFrame( animate )
         this.VRControls.update();
       }else{
-        window.requestAnimationFrame(animate);
+        window.requestAnimationFrame(animate)
       }
       var now = Date.now()
       var delta = now - last
@@ -67,7 +67,8 @@ class Stage {
   static create(container, options?){
     var ret = new Stage(options);
     ret.camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.1, 3500000 );
-  	ret.camera.position.z = 10;
+  	ret.camera.position.z = 4;
+    ret.camera.position.y = 1;
 
     ret.scene = new THREE.Scene();
   	ret.scene.background = new THREE.Color( 0x808080 );
@@ -96,7 +97,7 @@ class Stage {
       var RGBShiftShader = {
         uniforms: {
           "tDiffuse": { type: "t", value: null },
-          "amount":   { type: "f", value: 0.005 },
+          "amount":   { type: "f", value: 0.000 },
           "angle":    { type: "f", value: 0.0 }
         },
         vertexShader: [

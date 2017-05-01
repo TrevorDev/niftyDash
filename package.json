@@ -30,6 +30,8 @@
     "@types/request": "0.0.31",
     "@types/request-promise": "^3.0.32",
     "@types/sequelize": "^4.0.39",
+    "@types/socket.io": "^1.4.29",
+    "@types/socket.io-client": "^1.4.29",
     "@types/three": "^0.83.3",
     "@types/vue": "^1.0.30",
     "awesomplete": "^1.1.1",
