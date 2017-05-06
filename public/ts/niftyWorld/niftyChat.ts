@@ -96,32 +96,47 @@ var main = async ()=>{
 		
 		var recorder = audioContext.createScriptProcessor(audioBufferSize, 1, 1)
 		recorder.onaudioprocess = (e)=>{
+
 			//console.log("audioframne")
 			var left = e.inputBuffer.getChannelData(0);
 	        io.emit('audioBuffer', {buffer: left.buffer});
-
-
-	  
-
+	        //console.log(new Float32Array(left.buffer))
+	        var ar = new Float32Array(left.buffer)
+	        var max = 0
+	        for(var i = 0; i<audioBufferSize;i++){
+	        	max = Math.max(max, Math.abs(ar[i])
+	        }
+	        if(max > 0.2){
+	        	console.log("open mouth")
+	        }
 		}
 		mediaStreamSource.connect(recorder)
 		recorder.connect(audioContext.destination);
 	}
 	
 
-
+	var buffered = []
+	var count = 0
 	io.on('audioBuffer',function(buffer) {
-		//console.log(buffer)
-		var left = new Float32Array(buffer.buffer)
-		var source = audioContext.createBufferSource();
-		var audioBuffer = audioContext.createBuffer( 1, audioBufferSize, audioContext.sampleRate );
-		audioBuffer.getChannelData( 0 ).set( left );
-		source.buffer = audioBuffer;
-		source.connect( audioContext.destination );
-		source.start(0);
+		buffered.push(buffer)
+		count++;
+		if(count == 1{
+			console.log("hit")
+			var processor = audioContext.createScriptProcessor(audioBufferSize, 0, 1);
+			processor.onaudioprocess = function(e) {
+				var buffer = buffered.pop()
+				if(buffer){
+					var array = new Float32Array(buffer.buffer)
+					e.outputBuffer.getChannelData(0).set(array)
+				}else{
+					console.log("processed b4 audio arrived :(")
+					var array = new Float32Array(audioBufferSize)
+					e.outputBuffer.getChannelData(0).set(array)
+				}
+			}
+			processor.connect(audioContext.destination);
+		}
     });
-
-
 
 	//controllers
 	var controllers = {
