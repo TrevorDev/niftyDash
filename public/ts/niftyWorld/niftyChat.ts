@@ -104,9 +104,9 @@ var main = async ()=>{
 	        var ar = new Float32Array(left.buffer)
 	        var max = 0
 	        for(var i = 0; i<audioBufferSize;i++){
-	        	max = Math.max(max, Math.abs(ar[i])
+	        	max = Math.max(max, Math.abs(ar[i]))
 	        }
-	        if(max > 0.2){
+	        if(max > 0.1){
 	        	console.log("open mouth")
 	        }
 		}
@@ -120,7 +120,7 @@ var main = async ()=>{
 	io.on('audioBuffer',function(buffer) {
 		buffered.push(buffer)
 		count++;
-		if(count == 1{
+		if(count == 1){
 			console.log("hit")
 			var processor = audioContext.createScriptProcessor(audioBufferSize, 0, 1);
 			processor.onaudioprocess = function(e) {
