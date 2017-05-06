@@ -172,4 +172,8 @@ export default {
     map: THREE.ImageUtils.loadTexture('/public/img/FaceMouthOpen.png'),
     color: 0xFFFFFF
   }),
+ BIT_FACE_MOUTH_OPEN: new THREE.MeshLambertMaterial({
+    map: THREE.ImageUtils.loadTexture('/public/img/BitMouthOpen.png'),
+    color: 0xFFFFFF
+  }),
 }

@@ -1,6 +1,7 @@
 import THREE = require("three")
 import Stage from "../../../libs/niftyWorld/objects/stage"
 import MATERIALS from "../../../libs/niftyWorld/libs/materials"
+import OBJLoader from "../../../libs/niftyWorld/threeExtensions/OBJLoader"
 
 function guid() {
   function s4() {
@@ -66,7 +67,7 @@ class TrackedObjectManager {
 
 class TrackedObject {
   type:string = ""
-  mesh:THREE.Mesh
+  mesh:THREE.Object3D
   guid:string
   owner:string //socketID or server
   constructor(args){
@@ -78,10 +79,27 @@ class TrackedObject {
       this.mesh = new THREE.Mesh( geo, MATERIALS.DEFAULT );
     }else if(this.type == "head"){
       let geo = new THREE.SphereGeometry(0.3, 32,16);
-      this.mesh = new THREE.Mesh( geo, MATERIALS.SMILE_FACE_MOUTH_OPEN )
-    }else if(this.type == "controller"){
-      let geo = new THREE.SphereGeometry(0.1, 10,10);
-      this.mesh = new THREE.Mesh( geo, MATERIALS.SMILE_FACE_MOUTH_OPEN )
+      this.mesh = new THREE.Mesh( geo, MATERIALS.BIT_FACE_MOUTH_OPEN )
+    }else if(this.type == "leftController" || this.type == "rightController"){
+      this.mesh = new THREE.Object3D();
+      var loader = new OBJLoader(undefined);
+      loader.setPath( '/public/models/' );
+      loader.load( 'hand2.obj', ( object ) => {
+
+        var loader = new THREE.TextureLoader();
+        loader.setPath( '/public/models/' );
+        if(this.type == "rightController"){
+          object.children.forEach((c)=>{
+            c.material.side = THREE.BackSide;
+            
+          })
+          object.scale.setX(-1)
+        }
+        this.mesh.add( object.clone() );
+        //this.mesh.material.side = THREE.DoubleSide
+      });
+
+
     }
     this.update(args)
   }

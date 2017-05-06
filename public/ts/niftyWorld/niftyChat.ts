@@ -141,8 +141,8 @@ var main = async ()=>{
 	var leftHand = null
 	var rightHand = null
 	if(controllers.left.position.z != 0 ){
-		leftHand = tManager.createObject("controller")
-		rightHand = tManager.createObject("controller")
+		leftHand = tManager.createObject("leftController")
+		rightHand = tManager.createObject("rightController")
 	}
 
 	//default scene
